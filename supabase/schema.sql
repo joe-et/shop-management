@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS equipment_items (
     customer_phone TEXT,
     quantity INTEGER NOT NULL DEFAULT 1 CHECK (quantity >= 0),
     unit TEXT DEFAULT 'pcs',
+    min_stock_threshold INTEGER DEFAULT 5,
     location TEXT DEFAULT 'Main Shop Floor',
     notes TEXT,
     warranty_period_months INTEGER DEFAULT 0,
