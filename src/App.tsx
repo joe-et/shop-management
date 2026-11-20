@@ -16,7 +16,6 @@ import {
   updateItem, 
   deleteItem, 
   markAsSold, 
-  resetToDemoData, 
   subscribeToInventory,
   getExpenses,
   createExpense,
@@ -52,7 +51,6 @@ export default function App() {
   const [items, setItems] = useState<EquipmentItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isConfigured, setIsConfigured] = useState<boolean>(isSupabaseConfigured());
-  const [isResetting, setIsResetting] = useState<boolean>(false);
   const [activeWorkspace, setActiveWorkspace] = useState<'counter' | 'reports'>('counter');
 
   // Filters State
@@ -153,20 +151,6 @@ export default function App() {
         ? t.toasts.connectedSupabase
         : t.toasts.switchedDemo
     );
-  };
-
-  // Reset Demo Data
-  const handleResetDemo = async () => {
-    try {
-      setIsResetting(true);
-      const demoData = await resetToDemoData();
-      setItems(demoData);
-      showToast(t.toasts.loadedCatalog);
-    } catch (err) {
-      console.error('Failed to reset demo data:', err);
-    } finally {
-      setIsResetting(false);
-    }
   };
 
   // Create or Update Item
@@ -305,13 +289,11 @@ export default function App() {
           setEditingItem(null);
           setIsItemModalOpen(true);
         }}
-        onResetDemo={handleResetDemo}
         onOpenAudit={() => {
           setAuditFilterItemId(null);
           setIsAuditModalOpen(true);
         }}
         onOpenExpenses={() => setIsExpensesModalOpen(true)}
-        isResetting={isResetting}
       />
 
       {/* Main Content Workspace Container */}

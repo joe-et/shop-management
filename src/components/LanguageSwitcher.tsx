@@ -60,7 +60,7 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ compact = fa
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-1.5 w-44 rounded-xl bg-white border border-slate-200 shadow-lg z-50 p-1 space-y-0.5 animate-in fade-in slide-in-from-top-1 duration-150">
+        <div className="absolute left-0 bottom-full mb-1.5 sm:left-full sm:bottom-0 sm:ml-2 sm:mb-0 w-44 rounded-xl bg-white border border-slate-200 shadow-xl z-50 p-1 space-y-0.5 animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100 mb-0.5 flex items-center gap-1.5">
             <Globe className="w-3 h-3 text-slate-500" />
             <span>Language / ቋንቋ</span>

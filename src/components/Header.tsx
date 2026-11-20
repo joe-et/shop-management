@@ -1,7 +1,6 @@
 import React from 'react';
 import { 
   Download, 
-  RefreshCw, 
   Plus,
   Boxes,
   BarChart3,
@@ -17,11 +16,9 @@ interface HeaderProps {
   activeWorkspace: 'counter' | 'reports';
   onChangeWorkspace: (workspace: 'counter' | 'reports') => void;
   onOpenAddItem: () => void;
-  onResetDemo: () => void;
   onOpenAudit: () => void;
   onOpenExpenses?: () => void;
   onOpenConfig?: () => void;
-  isResetting?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -29,10 +26,8 @@ export const Header: React.FC<HeaderProps> = ({
   activeWorkspace,
   onChangeWorkspace,
   onOpenAddItem,
-  onResetDemo,
   onOpenAudit,
   onOpenExpenses,
-  isResetting = false,
 }) => {
   const { t } = useTranslation();
 
@@ -124,17 +119,6 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <Download className="w-3.5 h-3.5 text-slate-500" />
             <span>{t.common.exportCsv}</span>
-          </button>
-
-          {/* Demo Reset (Neutral secondary utility) */}
-          <button
-            type="button"
-            onClick={onResetDemo}
-            disabled={isResetting}
-            className="hidden md:inline-flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 text-xs font-medium transition-colors cursor-pointer disabled:opacity-50 shadow-2xs"
-            title={t.common.resetDemo}
-          >
-            <RefreshCw className={`w-3.5 h-3.5 text-slate-400 ${isResetting ? 'animate-spin' : ''}`} />
           </button>
 
           {/* Reserved Primary CTA: High-Contrast Black Button */}
