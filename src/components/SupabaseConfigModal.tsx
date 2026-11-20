@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { 
   X, 
-  Database, 
+  Settings, 
   Key, 
   Globe, 
   CheckCircle2, 
   AlertCircle, 
   RefreshCw, 
-  ExternalLink,
   Trash2,
-  Copy,
-  Check,
   ShieldAlert
 } from 'lucide-react';
 import { 
@@ -42,7 +39,6 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
     success: boolean;
     message: string;
   } | null>(null);
-  const [copiedSql, setCopiedSql] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -61,7 +57,7 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
     if (!cleanUrl || !cleanKey) {
       setTestResult({
         success: false,
-        message: 'Please provide both Supabase URL and Anon Key.',
+        message: 'Please provide both Cloud Database URL and API Access Key.',
       });
       return;
     }
@@ -77,11 +73,10 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
         .limit(1);
 
       if (error) {
-        // Check if error is due to missing table or bad auth
         if (error.code === '42P01') {
           setTestResult({
             success: false,
-            message: 'Connected to Supabase, but the "equipment_items" table was not found. Please execute the script in `supabase/schema.sql`.',
+            message: 'Connected to cloud database, but the "equipment_items" table was not found.',
           });
         } else {
           setTestResult({
@@ -92,11 +87,11 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
       } else {
         setTestResult({
           success: true,
-          message: 'Connection successful! Verified access to "equipment_items" table.',
+          message: 'Connection successful! Verified access to cloud database.',
         });
       }
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Network error testing Supabase';
+      const msg = err instanceof Error ? err.message : 'Network error testing cloud database connection';
       setTestResult({
         success: false,
         message: msg,
@@ -129,17 +124,9 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
     setAnonKey('');
     setTestResult({
       success: true,
-      message: 'Supabase credentials cleared. Switched back to local demo storage.',
+      message: 'Cloud credentials cleared. Switched to local device storage.',
     });
     onConfigSaved();
-  };
-
-  const copySchemaHint = () => {
-    setCopiedSql(true);
-    navigator.clipboard.writeText(
-      'Open your Supabase Project -> SQL Editor -> New Query -> Paste contents of supabase/schema.sql -> Run'
-    );
-    setTimeout(() => setCopiedSql(false), 2000);
   };
 
   const currentlyConfigured = isSupabaseConfigured();
@@ -154,7 +141,7 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-200 bg-slate-50">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-xs">
-              <Database className="w-4 h-4 stroke-[2.2]" />
+              <Settings className="w-4 h-4 stroke-[2.2]" />
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-bold text-slate-900">{t.dbModal.title}</h3>
@@ -163,7 +150,7 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -190,45 +177,10 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
               </p>
               <p className="text-slate-600 text-[11px]">
                 {currentlyConfigured
-                  ? 'Your application communicates live with Supabase cloud. Changes sync in real-time across tabs.'
-                  : 'Currently operating with in-memory & local browser storage with realistic demo items. Connect Supabase below to persist across devices.'}
+                  ? 'Your application communicates live with the cloud database. Changes sync in real-time across devices.'
+                  : 'Currently operating with local device storage. Connect your cloud database below to sync across devices.'}
               </p>
             </div>
-          </div>
-
-          {/* Quick Setup Instructions */}
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1.5">
-            <div className="flex items-center justify-between">
-              <span className="font-semibold text-slate-800">How to connect:</span>
-              <a
-                href="https://supabase.com"
-                target="_blank"
-                rel="noreferrer"
-                className="text-slate-900 hover:underline flex items-center gap-1 text-[11px] font-medium"
-              >
-                <span>Supabase Dashboard</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
-            </div>
-            <ol className="list-decimal list-inside space-y-0.5 text-slate-500 text-[11px]">
-              <li>Create a new project on Supabase.</li>
-              <li>
-                Run the included schema file{' '}
-                <code className="text-slate-900 font-mono bg-white border border-slate-200 px-1 py-0.2 rounded">
-                  supabase/schema.sql
-                </code>{' '}
-                in the SQL Editor.
-              </li>
-              <li>Go to Project Settings &gt; API, and copy Project URL and Anon Public Key.</li>
-            </ol>
-            <button
-              type="button"
-              onClick={copySchemaHint}
-              className="mt-0.5 flex items-center gap-1.5 text-[11px] text-slate-500 hover:text-slate-800 cursor-pointer"
-            >
-              {copiedSql ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
-              <span>{copiedSql ? 'Copied instructions' : 'Copy schema setup instructions'}</span>
-            </button>
           </div>
 
           {/* Credentials Inputs */}
@@ -307,7 +259,7 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 transition-colors disabled:opacity-40 cursor-pointer shadow-2xs"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isTesting ? 'animate-spin text-slate-900' : 'text-slate-500'}`} />
-                <span>{isTesting ? t.common.loading : 'Test Connection'}</span>
+                <span>{isTesting ? t.common.loading : t.dbModal.testConnection}</span>
               </button>
 
               <button

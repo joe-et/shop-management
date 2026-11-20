@@ -481,7 +481,7 @@ export default function App() {
         onConfirm={handleConfirmSold}
       />
 
-      {/* Supabase Config Modal */}
+      {/* System Settings Modal */}
       <SupabaseConfigModal
         isOpen={isConfigModalOpen}
         onClose={() => setIsConfigModalOpen(false)}

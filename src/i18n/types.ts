@@ -270,7 +270,7 @@ export interface TranslationDictionary {
     noActivityFound: string;
   };
 
-  // Database / Supabase Modal
+  // Database / System Settings Modal
   dbModal: {
     title: string;
     subtitle: string;
@@ -280,6 +280,7 @@ export interface TranslationDictionary {
     anonKey: string;
     connectCloud: string;
     switchToLocal: string;
+    testConnection: string;
   };
 
   // Categories

@@ -9,7 +9,7 @@ export const enTranslations: TranslationDictionary = {
     expenses: 'Shop Costs',
     exportCsv: 'Export CSV',
     resetDemo: 'Clear Data',
-    database: 'Database',
+    database: 'System Settings',
     save: 'Save',
     cancel: 'Cancel',
     close: 'Close',
@@ -248,14 +248,15 @@ export const enTranslations: TranslationDictionary = {
   },
 
   dbModal: {
-    title: 'Supabase Database Connection',
-    subtitle: 'Connect your Supabase database to save items online in the cloud',
-    cloudConnected: 'Connected to Supabase Cloud',
-    localDemoMode: 'Saved locally on this computer',
-    projectUrl: 'Supabase Project URL',
-    anonKey: 'Supabase Anon Key',
+    title: 'System Settings',
+    subtitle: 'Manage your cloud database connection and storage preferences',
+    cloudConnected: 'Cloud Database Connected',
+    localDemoMode: 'Saved locally on this device',
+    projectUrl: 'Cloud Database URL',
+    anonKey: 'API Access Key',
     connectCloud: 'Save & Connect',
-    switchToLocal: 'Clear Saved Keys',
+    switchToLocal: 'Disconnect Cloud',
+    testConnection: 'Test Connection',
   },
 
   categories: {

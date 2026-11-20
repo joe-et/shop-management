@@ -9,7 +9,7 @@ export const amTranslations: TranslationDictionary = {
     expenses: 'የሱቅ ወጪዎች',
     exportCsv: 'በCSV አውርድ',
     resetDemo: 'መረጃ አጥፋ',
-    database: 'ዳታቤዝ',
+    database: 'የሲስተም ቅንብሮች',
     save: 'አስቀምጥ',
     cancel: 'ይቅር',
     close: 'ዝጋ',
@@ -248,14 +248,15 @@ export const amTranslations: TranslationDictionary = {
   },
 
   dbModal: {
-    title: 'የሱፓቤዝ (Supabase) ዳታቤዝ ግንኙነት',
-    subtitle: 'የሱቅዎ መረጃ በክላውድ ላይ በሰላም እንዲቀመጥ ሱፓቤዝን ያገናኙ',
-    cloudConnected: 'ከሱፓቤዝ ክላውድ ጋር ተገናኝቷል',
-    localDemoMode: 'በዚህ ኮምፒውተር ላይ ብቻ የተቀመጠ',
-    projectUrl: 'የሱፓቤዝ Project URL',
-    anonKey: 'የሱፓቤዝ Anon Key',
+    title: 'የሲስተም ቅንብሮች',
+    subtitle: 'የክላውድ ዳታቤዝ ግንኙነት እና የሱቅ ምርጫዎችን ያስተካክሉ',
+    cloudConnected: 'ከክላውድ ዳታቤዝ ጋር ተገናኝቷል',
+    localDemoMode: 'በዚህ መሣሪያ ላይ ብቻ የተቀመጠ',
+    projectUrl: 'የክላውድ ዳታቤዝ አድራሻ (URL)',
+    anonKey: 'የኤፒአይ ቁልፍ (API Access Key)',
     connectCloud: 'አስቀምጥ እና አገናኝ',
-    switchToLocal: 'የተቀመጡ ቁልፎችን አጥፋ',
+    switchToLocal: 'ክላውድ አቋርጥ',
+    testConnection: 'ግንኙነት ሞክር',
   },
 
   categories: {

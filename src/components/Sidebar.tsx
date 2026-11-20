@@ -192,7 +192,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </span>
         </button>
 
-        {/* Supabase Settings */}
+        {/* System Settings */}
         <button
           type="button"
           onClick={onOpenConfig}

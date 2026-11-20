@@ -9,7 +9,7 @@ export const omTranslations: TranslationDictionary = {
     expenses: 'Baasii Suuqii',
     exportCsv: 'CSV Baasi',
     resetDemo: 'Odeeffannoo Haqi',
-    database: 'Kuusaa Daataa',
+    database: 'Qindaa\'ina Sirnaa',
     save: 'Olkaayi',
     cancel: 'Dhiisi',
     close: 'Cufi',
@@ -248,14 +248,15 @@ export const omTranslations: TranslationDictionary = {
   },
 
   dbModal: {
-    title: 'Walqunnamsiisa Supabase Database',
-    subtitle: 'Odeeffannoo kee kilaawudii Supabase irratti olkaawuuf walqunnamsiisi',
-    cloudConnected: 'Supabase Kilaawudii Waliin Qunnameera',
-    localDemoMode: 'Kompiitara kana qofa irratti olkaawame',
-    projectUrl: 'Supabase Project URL',
-    anonKey: 'Supabase Anon Key',
+    title: 'Qindaa\'ina Sirnaa',
+    subtitle: 'Walqunnamsiisa kuusaa kilaawudii fi filannoowwan sirnaa to\'adhu',
+    cloudConnected: 'Kuusaa Kilaawudii Waliin Qunnameera',
+    localDemoMode: 'Meeshaa kana qofa irratti olkaawame',
+    projectUrl: 'Teessoo Kilaawudii (URL)',
+    anonKey: 'Furtuu API (API Access Key)',
     connectCloud: 'Olkaayi fi Qunnamti',
-    switchToLocal: 'Furtuuwwan Olkaawaman Haqi',
+    switchToLocal: 'Kilaawudii Addaan Kuti',
+    testConnection: 'Walqunnamsiisa Qori',
   },
 
   categories: {
