@@ -7,7 +7,7 @@ import { QuickAddBar } from './components/QuickAddBar';
 import { InventoryTable } from './components/InventoryTable';
 import { ItemModal } from './components/ItemModal';
 import { MarkSoldModal } from './components/MarkSoldModal';
-import { SupabaseConfigModal } from './components/SupabaseConfigModal';
+import { SystemSettingsModal } from './components/SystemSettingsModal';
 import { AuditModal } from './components/AuditModal';
 import { ExpensesModal } from './components/ExpensesModal';
 import { 
@@ -141,17 +141,6 @@ export default function App() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
-
-  // Handle configuration update
-  const handleConfigSaved = () => {
-    setIsConfigured(isSupabaseConfigured());
-    loadInventory();
-    showToast(
-      isSupabaseConfigured()
-        ? t.toasts.connectedSupabase
-        : t.toasts.switchedDemo
-    );
-  };
 
   // Create or Update Item
   const handleSaveItem = async (input: EquipmentItemInput, itemId?: string) => {
@@ -482,10 +471,13 @@ export default function App() {
       />
 
       {/* System Settings Modal */}
-      <SupabaseConfigModal
+      <SystemSettingsModal
         isOpen={isConfigModalOpen}
         onClose={() => setIsConfigModalOpen(false)}
-        onConfigSaved={handleConfigSaved}
+        onSettingsSaved={() => {
+          setIsConfigured(isSupabaseConfigured());
+          showToast(t.settingsModal.saveSuccess);
+        }}
       />
 
       {/* Audit & Physical Stocktake Modal */}

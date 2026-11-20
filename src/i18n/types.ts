@@ -270,7 +270,43 @@ export interface TranslationDictionary {
     noActivityFound: string;
   };
 
-  // Database / System Settings Modal
+  // System Settings Modal (Profile, Display Mode, Password/Security)
+  settingsModal: {
+    title: string;
+    subtitle: string;
+    tabProfile: string;
+    tabAppearance: string;
+    tabSecurity: string;
+    shopName: string;
+    shopNamePlaceholder: string;
+    managerName: string;
+    managerNamePlaceholder: string;
+    phoneNumber: string;
+    phoneNumberPlaceholder: string;
+    currency: string;
+    currencyValue: string;
+    currencyHint: string;
+    cloudStatus: string;
+    cloudConnectedDesc: string;
+    cloudLocalDesc: string;
+    language: string;
+    appearanceMode: string;
+    lightMode: string;
+    darkMode: string;
+    modeDescription: string;
+    securityTitle: string;
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+    passwordHint: string;
+    saveSuccess: string;
+    passwordMismatch: string;
+    wrongCurrentPassword: string;
+    saveButton: string;
+    closeButton: string;
+  };
+
+  // Database / Cloud Sync Modal
   dbModal: {
     title: string;
     subtitle: string;
