@@ -34,6 +34,8 @@ export const omTranslations: TranslationDictionary = {
     revertToStock: 'Gara Qabeenyaatti Deebisi',
     currencySymbol: 'Br',
     currencyName: 'Itoophiyaa Birrii',
+    workspaceCounter: 'Qabeenya fi Gurgurtaa',
+    workspaceReports: 'Gabaasa Faayinaansii',
   },
 
   sync: {

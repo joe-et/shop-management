@@ -297,71 +297,71 @@ export const AuditModal: React.FC<AuditModalProps> = ({
       case 'item_sold':
       case 'partial_sale':
         return {
-          icon: <Receipt className="w-3.5 h-3.5 text-emerald-400" />,
+          icon: <Receipt className="w-3.5 h-3.5 text-emerald-600" />,
           label: getAuditActionLabel(action),
-          badgeClass: 'bg-emerald-950/70 text-emerald-300 border-emerald-700/60',
+          badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
         };
       case 'price_changed':
         return {
-          icon: <TrendingUp className="w-3.5 h-3.5 text-violet-400" />,
+          icon: <TrendingUp className="w-3.5 h-3.5 text-indigo-600" />,
           label: getAuditActionLabel(action),
-          badgeClass: 'bg-violet-950/70 text-violet-300 border-violet-700/60',
+          badgeClass: 'bg-indigo-50 text-indigo-700 border-indigo-200',
         };
       case 'item_created':
         return {
-          icon: <PackagePlus className="w-3.5 h-3.5 text-cyan-400" />,
+          icon: <PackagePlus className="w-3.5 h-3.5 text-cyan-600" />,
           label: getAuditActionLabel(action),
-          badgeClass: 'bg-cyan-950/70 text-cyan-300 border-cyan-700/60',
+          badgeClass: 'bg-cyan-50 text-cyan-700 border-cyan-200',
         };
       case 'stocktake_adjustment':
         return {
-          icon: <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />,
+          icon: <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />,
           label: getAuditActionLabel(action),
-          badgeClass: 'bg-amber-950/70 text-amber-300 border-amber-700/60',
+          badgeClass: 'bg-amber-50 text-amber-700 border-amber-200',
         };
       case 'item_deleted':
         return {
-          icon: <Trash2 className="w-3.5 h-3.5 text-rose-400" />,
+          icon: <Trash2 className="w-3.5 h-3.5 text-rose-600" />,
           label: getAuditActionLabel(action),
-          badgeClass: 'bg-rose-950/70 text-rose-300 border-rose-700/60',
+          badgeClass: 'bg-rose-50 text-rose-700 border-rose-200',
         };
       case 'reverted_to_stock':
         return {
-          icon: <RefreshCw className="w-3.5 h-3.5 text-slate-400" />,
+          icon: <RefreshCw className="w-3.5 h-3.5 text-slate-500" />,
           label: getAuditActionLabel(action),
-          badgeClass: 'bg-slate-800 text-slate-300 border-slate-700',
+          badgeClass: 'bg-slate-100 text-slate-700 border-slate-200',
         };
       default:
         return {
-          icon: <Tag className="w-3.5 h-3.5 text-slate-400" />,
+          icon: <Tag className="w-3.5 h-3.5 text-slate-500" />,
           label: getAuditActionLabel(action),
-          badgeClass: 'bg-slate-800 text-slate-300 border-slate-700',
+          badgeClass: 'bg-slate-100 text-slate-700 border-slate-200',
         };
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
       <div 
-        className="w-full max-w-5xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
+        className="w-full max-w-5xl bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[92vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Top Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/70 gap-3">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500/20 to-teal-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center shadow-inner">
-              <ShieldCheck className="w-5 h-5" />
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-5 py-3.5 border-b border-slate-200 bg-slate-50 gap-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-xs">
+              <ShieldCheck className="w-4 h-4 stroke-[2.2]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold text-white">
+                <h3 className="text-sm sm:text-base font-bold text-slate-900">
                   {t.auditModal.modalTitle}
                 </h3>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
                   {auditLogs.length} {t.common.actions}
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 {t.auditModal.modalSubtitle}
               </p>
             </div>
@@ -369,14 +369,14 @@ export const AuditModal: React.FC<AuditModalProps> = ({
 
           <div className="flex items-center gap-2 self-end sm:self-auto">
             {/* Tab switch pills */}
-            <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800">
+            <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200">
               <button
                 type="button"
                 onClick={() => setActiveTab('trail')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${
                   activeTab === 'trail'
-                    ? 'bg-slate-800 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-slate-900 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 <History className="w-3.5 h-3.5" />
@@ -386,16 +386,16 @@ export const AuditModal: React.FC<AuditModalProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveTab('stocktake')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${
                   activeTab === 'stocktake'
-                    ? 'bg-amber-950/80 text-amber-300 border border-amber-600/50 shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-slate-900 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                <ClipboardCheck className="w-3.5 h-3.5 text-amber-400" />
+                <ClipboardCheck className="w-3.5 h-3.5" />
                 <span>{t.auditModal.tabPhysicalStocktake}</span>
                 {totalDiscrepancies > 0 && (
-                  <span className="ml-1 px-1.5 py-0.2 rounded-full bg-rose-900 text-rose-300 text-[10px] font-bold">
+                  <span className="ml-1 px-1.5 py-0.2 rounded-full bg-rose-600 text-white text-[10px] font-bold">
                     {totalDiscrepancies}
                   </span>
                 )}
@@ -404,7 +404,7 @@ export const AuditModal: React.FC<AuditModalProps> = ({
 
             <button
               onClick={onClose}
-              className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors ml-1 cursor-pointer"
+              className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors ml-1 cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -431,16 +431,16 @@ export const AuditModal: React.FC<AuditModalProps> = ({
         {activeTab === 'trail' && (
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* Control & Filter Strip */}
-            <div className="p-4 border-b border-slate-800 bg-slate-950/40 grid grid-cols-1 sm:grid-cols-12 gap-3">
+            <div className="p-3 border-b border-slate-200 bg-slate-50 grid grid-cols-1 sm:grid-cols-12 gap-2.5">
               {/* Search */}
               <div className="sm:col-span-5 relative">
-                <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={t.filters.searchPlaceholder}
-                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+                  className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-900"
                 />
               </div>
 
@@ -449,7 +449,7 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                 <select
                   value={selectedAction}
                   onChange={(e) => setSelectedAction(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500/50 cursor-pointer"
+                  className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-900 cursor-pointer"
                 >
                   <option value="all">{t.common.all}</option>
                   <option value="sales">{t.auditActions.item_sold}</option>
@@ -465,9 +465,9 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                 <button
                   type="button"
                   onClick={handleExportAuditCsv}
-                  className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors shadow-sm cursor-pointer"
+                  className="w-full flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 transition-colors shadow-2xs cursor-pointer"
                 >
-                  <Download className="w-3.5 h-3.5 text-cyan-400" />
+                  <Download className="w-3.5 h-3.5 text-slate-500" />
                   <span>{t.auditModal.exportAuditCsv}</span>
                 </button>
               </div>
@@ -475,14 +475,14 @@ export const AuditModal: React.FC<AuditModalProps> = ({
 
             {/* Active Item Filter Chip */}
             {selectedItemFilter && (
-              <div className="px-6 py-2 bg-slate-950 border-b border-slate-800/80 flex items-center justify-between text-xs">
-                <span className="text-slate-400">
-                  {t.auditModal.filterByItem}: <code className="text-amber-300 font-mono">{selectedItemFilter}</code>
+              <div className="px-5 py-1.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between text-xs">
+                <span className="text-slate-500">
+                  {t.auditModal.filterByItem}: <code className="text-slate-900 font-mono font-semibold">{selectedItemFilter}</code>
                 </span>
                 <button
                   type="button"
                   onClick={() => setSelectedItemFilter(null)}
-                  className="text-emerald-400 hover:underline flex items-center gap-1 font-semibold"
+                  className="text-slate-700 hover:underline flex items-center gap-1 font-semibold cursor-pointer"
                 >
                   <X className="w-3 h-3" />
                   {t.auditModal.allEquipmentItems}
@@ -491,16 +491,16 @@ export const AuditModal: React.FC<AuditModalProps> = ({
             )}
 
             {/* Timeline Log List */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-3.5">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-2.5">
               {loading ? (
-                <div className="p-12 text-center text-slate-400 text-sm">
+                <div className="p-8 text-center text-slate-400 text-xs">
                   {t.common.loading}
                 </div>
               ) : filteredLogs.length === 0 ? (
-                <div className="p-12 text-center bg-slate-950/40 rounded-2xl border border-slate-800/60 space-y-2">
-                  <FileSpreadsheet className="w-8 h-8 text-slate-600 mx-auto" />
-                  <p className="text-sm font-semibold text-slate-300">{t.auditModal.noActivityFound}</p>
-                  <p className="text-xs text-slate-500">{t.filters.searchPlaceholder}</p>
+                <div className="p-8 text-center bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+                  <FileSpreadsheet className="w-6 h-6 text-slate-400 mx-auto" />
+                  <p className="text-xs font-semibold text-slate-800">{t.auditModal.noActivityFound}</p>
+                  <p className="text-[11px] text-slate-400">{t.filters.searchPlaceholder}</p>
                 </div>
               ) : (
                 filteredLogs.map((log) => {
@@ -508,29 +508,29 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                   return (
                     <div
                       key={log.id}
-                      className="p-4 rounded-xl bg-slate-950/70 border border-slate-800/80 hover:border-slate-700 transition-all space-y-2.5 shadow-sm"
+                      className="p-3 rounded-xl bg-white border border-slate-200 hover:border-slate-300 transition-all space-y-1.5 shadow-2xs"
                     >
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
                         <div className="flex items-center gap-2">
                           <span
-                            className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${badge.badgeClass}`}
+                            className={`flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium border ${badge.badgeClass}`}
                           >
                             {badge.icon}
                             <span>{badge.label}</span>
                           </span>
-                          <h4 className="font-bold text-white text-sm">{log.item_name}</h4>
+                          <h4 className="font-semibold text-slate-900 text-xs sm:text-sm">{log.item_name}</h4>
                         </div>
-                        <span className="text-[11px] text-slate-400 font-mono">
+                        <span className="text-[10px] text-slate-400 font-mono">
                           {formatDateTime(log.timestamp)}
                         </span>
                       </div>
 
-                      <p className="text-xs text-slate-300 leading-relaxed">{log.details}</p>
+                      <p className="text-xs text-slate-600 leading-relaxed">{log.details}</p>
 
-                      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/60 text-[11px] text-slate-400">
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-1.5 border-t border-slate-100 text-[11px] text-slate-500">
                         <div className="flex items-center gap-3">
                           <span>
-                            Actor: <strong className="text-slate-200">{log.actor}</strong>
+                            Actor: <strong className="text-slate-800">{log.actor}</strong>
                           </span>
                           {log.quantity_change !== undefined && log.quantity_change !== null && (
                             <span>
@@ -538,10 +538,10 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                               <strong
                                 className={
                                   log.quantity_change > 0
-                                    ? 'text-emerald-400'
+                                    ? 'text-emerald-600'
                                     : log.quantity_change < 0
-                                    ? 'text-rose-400'
-                                    : 'text-slate-300'
+                                    ? 'text-rose-600'
+                                    : 'text-slate-700'
                                 }
                               >
                                 {log.quantity_change > 0 ? `+${log.quantity_change}` : log.quantity_change}
@@ -554,12 +554,12 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                           <div className="flex items-center gap-1.5">
                             <span className="text-slate-400">{t.metrics.financialOverview}:</span>
                             <span
-                              className={`font-black ${
+                              className={`font-bold ${
                                 log.financial_impact > 0
-                                  ? 'text-emerald-400'
+                                  ? 'text-emerald-600'
                                   : log.financial_impact < 0
-                                  ? 'text-rose-400'
-                                  : 'text-slate-400'
+                                  ? 'text-rose-600'
+                                  : 'text-slate-600'
                               }`}
                             >
                               {log.financial_impact >= 0
@@ -581,43 +581,43 @@ export const AuditModal: React.FC<AuditModalProps> = ({
         {activeTab === 'stocktake' && (
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* Stocktake KPI Cards Header */}
-            <div className="p-4 border-b border-slate-800 bg-slate-950/40 grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                <span className="text-[11px] text-slate-400 uppercase font-semibold block">{t.metrics.equipmentCountBalance}</span>
-                <span className="text-lg font-bold text-white">{inStockItems.length} SKUs</span>
+            <div className="p-3 border-b border-slate-200 bg-slate-50 grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <div className="p-2.5 rounded-lg bg-white border border-slate-200">
+                <span className="text-[10px] text-slate-400 uppercase font-semibold block">{t.metrics.equipmentCountBalance}</span>
+                <span className="text-base font-bold text-slate-900">{inStockItems.length} SKUs</span>
               </div>
 
-              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                <span className="text-[11px] text-slate-400 uppercase font-semibold block">{t.auditModal.reconciledBadge}</span>
-                <span className="text-lg font-bold text-emerald-400">
+              <div className="p-2.5 rounded-lg bg-white border border-slate-200">
+                <span className="text-[10px] text-slate-400 uppercase font-semibold block">{t.auditModal.reconciledBadge}</span>
+                <span className="text-base font-bold text-emerald-600">
                   {totalVerified} / {inStockItems.length}
                 </span>
               </div>
 
-              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                <span className="text-[11px] text-slate-400 uppercase font-semibold block">{t.auditModal.columnVariance}</span>
+              <div className="p-2.5 rounded-lg bg-white border border-slate-200">
+                <span className="text-[10px] text-slate-400 uppercase font-semibold block">{t.auditModal.columnVariance}</span>
                 <span
-                  className={`text-lg font-bold ${
+                  className={`text-base font-bold ${
                     netVarianceUnits === 0
-                      ? 'text-slate-200'
+                      ? 'text-slate-700'
                       : netVarianceUnits > 0
-                      ? 'text-teal-400'
-                      : 'text-rose-400'
+                      ? 'text-emerald-600'
+                      : 'text-rose-600'
                   }`}
                 >
                   {netVarianceUnits > 0 ? `+${netVarianceUnits}` : netVarianceUnits} {t.units.pcs.plural}
                 </span>
               </div>
 
-              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                <span className="text-[11px] text-slate-400 uppercase font-semibold block">{t.auditModal.columnCostDiscrepancy}</span>
+              <div className="p-2.5 rounded-lg bg-white border border-slate-200">
+                <span className="text-[10px] text-slate-400 uppercase font-semibold block">{t.auditModal.columnCostDiscrepancy}</span>
                 <span
-                  className={`text-lg font-bold ${
+                  className={`text-base font-bold ${
                     netCostVariance === 0
-                      ? 'text-slate-200'
+                      ? 'text-slate-700'
                       : netCostVariance > 0
-                      ? 'text-teal-400'
-                      : 'text-rose-400'
+                      ? 'text-emerald-600'
+                      : 'text-rose-600'
                   }`}
                 >
                   {netCostVariance > 0 ? `+${formatBirr(netCostVariance)}` : formatBirr(netCostVariance)}
@@ -626,63 +626,63 @@ export const AuditModal: React.FC<AuditModalProps> = ({
             </div>
 
             {/* Quick Action Helper */}
-            <div className="px-6 py-2.5 bg-slate-950 border-b border-slate-800/80 flex items-center justify-between text-xs">
-              <span className="text-slate-400">
+            <div className="px-5 py-2 bg-slate-50 border-b border-slate-200 flex items-center justify-between text-xs">
+              <span className="text-slate-500">
                 {t.auditModal.stocktakeSubtitle}
               </span>
               <button
                 type="button"
                 onClick={handleVerifyAllMatching}
-                className="text-xs px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/30 transition-all font-semibold cursor-pointer"
+                className="text-xs px-2.5 py-1 rounded-lg bg-white hover:bg-slate-100 text-slate-800 border border-slate-200 transition-colors font-semibold cursor-pointer shadow-2xs"
               >
                 {t.auditModal.quickAllMatch}
               </button>
             </div>
 
             {/* Stocktake Checklist Table */}
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6">
-              <div className="border border-slate-800 rounded-xl overflow-hidden bg-slate-950">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-5">
+              <div className="border border-slate-200 rounded-xl overflow-hidden bg-white">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-900 border-b border-slate-800 text-slate-400 uppercase tracking-wider font-semibold">
+                  <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-semibold">
                     <tr>
-                      <th className="py-3 px-3 w-10 text-center">{t.auditModal.reconciledBadge}</th>
-                      <th className="py-3 px-3">{t.auditModal.columnEquipment}</th>
-                      <th className="py-3 px-3 text-center">{t.auditModal.columnExpectedSystem}</th>
-                      <th className="py-3 px-3 text-center">{t.auditModal.columnCountedPhysical}</th>
-                      <th className="py-3 px-3 text-center">{t.auditModal.columnVariance}</th>
-                      <th className="py-3 px-3 text-right">{t.auditModal.columnCostDiscrepancy}</th>
-                      <th className="py-3 px-3">{t.common.notes}</th>
+                      <th className="py-2.5 px-3 w-10 text-center">{t.auditModal.reconciledBadge}</th>
+                      <th className="py-2.5 px-3">{t.auditModal.columnEquipment}</th>
+                      <th className="py-2.5 px-3 text-center">{t.auditModal.columnExpectedSystem}</th>
+                      <th className="py-2.5 px-3 text-center">{t.auditModal.columnCountedPhysical}</th>
+                      <th className="py-2.5 px-3 text-center">{t.auditModal.columnVariance}</th>
+                      <th className="py-2.5 px-3 text-right">{t.auditModal.columnCostDiscrepancy}</th>
+                      <th className="py-2.5 px-3">{t.common.notes}</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800/60">
+                  <tbody className="divide-y divide-slate-100">
                     {stocktakeVariances.map((v) => (
-                      <tr key={v.item.id} className="hover:bg-slate-900/40 transition-colors">
-                        <td className="py-3 px-3 text-center">
+                      <tr key={v.item.id} className="hover:bg-slate-50/70 transition-colors">
+                        <td className="py-2.5 px-3 text-center">
                           <input
                             type="checkbox"
                             checked={v.verified}
                             onChange={() => handleToggleVerified(v.item.id)}
-                            className="w-4 h-4 rounded text-emerald-500 focus:ring-emerald-500 bg-slate-900 border-slate-700 cursor-pointer"
+                            className="w-4 h-4 rounded text-slate-900 focus:ring-slate-900 border-slate-300 cursor-pointer"
                           />
                         </td>
-                        <td className="py-3 px-3">
-                          <div className="font-bold text-white text-xs sm:text-sm">{v.item.name}</div>
-                          <div className="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
+                        <td className="py-2.5 px-3">
+                          <div className="font-semibold text-slate-900 text-xs sm:text-sm">{v.item.name}</div>
+                          <div className="text-[11px] text-slate-400 flex items-center gap-1 mt-0.5">
                             <span>{getCategoryLabel(v.item.category)}</span>
                             <span>•</span>
                             <span>{v.item.brand}</span>
                             {v.item.serial_number && <span>• SN: {v.item.serial_number}</span>}
                           </div>
                         </td>
-                        <td className="py-3 px-3 text-center font-bold text-slate-300">
+                        <td className="py-2.5 px-3 text-center font-bold text-slate-700">
                           {v.systemQty}
                         </td>
-                        <td className="py-3 px-3">
+                        <td className="py-2.5 px-3">
                           <div className="flex items-center justify-center gap-1">
                             <button
                               type="button"
                               onClick={() => handleUpdateCount(v.item.id, -1)}
-                              className="p-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 cursor-pointer"
+                              className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer"
                             >
                               <Minus className="w-3 h-3" />
                             </button>
@@ -691,52 +691,52 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                               min="0"
                               value={v.countedQty}
                               onChange={(e) => handleSetExactCount(v.item.id, parseInt(e.target.value) || 0)}
-                              className="w-12 text-center py-1 bg-slate-900 border border-slate-700 rounded-lg text-xs font-bold text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                              className="w-12 text-center py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
                             />
                             <button
                               type="button"
                               onClick={() => handleUpdateCount(v.item.id, 1)}
-                              className="p-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 cursor-pointer"
+                              className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer"
                             >
                               <Plus className="w-3 h-3" />
                             </button>
                           </div>
                         </td>
-                        <td className="py-3 px-3 text-center">
+                        <td className="py-2.5 px-3 text-center">
                           {v.variance === 0 ? (
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800">
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                               0 {t.auditModal.reconciledBadge}
                             </span>
                           ) : v.variance > 0 ? (
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-950 text-teal-300 border border-teal-700">
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                               +{v.variance} Surplus
                             </span>
                           ) : (
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-950 text-rose-300 border border-rose-700">
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">
                               {v.variance} Missing
                             </span>
                           )}
                         </td>
-                        <td className="py-3 px-3 text-right font-mono font-semibold">
+                        <td className="py-2.5 px-3 text-right font-mono font-semibold">
                           <span
                             className={
                               v.costDiscrepancy === 0
-                                ? 'text-slate-400'
+                                ? 'text-slate-500'
                                 : v.costDiscrepancy > 0
-                                ? 'text-teal-400'
-                                : 'text-rose-400'
+                                ? 'text-emerald-600'
+                                : 'text-rose-600'
                             }
                           >
                             {v.costDiscrepancy > 0 ? `+${formatBirr(v.costDiscrepancy)}` : formatBirr(v.costDiscrepancy)}
                           </span>
                         </td>
-                        <td className="py-3 px-3">
+                        <td className="py-2.5 px-3">
                           <input
                             type="text"
                             value={v.notes || ''}
                             onChange={(e) => handleUpdateNotes(v.item.id, e.target.value)}
                             placeholder={t.common.notes}
-                            className="w-full px-2 py-1 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                            className="w-full px-2 py-1 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-900"
                           />
                         </td>
                       </tr>
@@ -747,26 +747,26 @@ export const AuditModal: React.FC<AuditModalProps> = ({
             </div>
 
             {/* Stocktake Bottom Actions */}
-            <div className="p-4 border-t border-slate-800 bg-slate-950/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <div className="text-xs text-slate-400">
+            <div className="p-3.5 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
+              <div className="text-xs text-slate-600">
                 {totalDiscrepancies > 0 ? (
-                  <span className="text-amber-300 font-semibold flex items-center gap-1.5">
-                    <AlertCircle className="w-4 h-4 text-amber-400" />
+                  <span className="text-amber-700 font-semibold flex items-center gap-1.5">
+                    <AlertCircle className="w-4 h-4 text-amber-600" />
                     {totalDiscrepancies} {t.auditModal.columnVariance}
                   </span>
                 ) : (
-                  <span className="text-emerald-400 font-medium flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  <span className="text-emerald-700 font-medium flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                     {t.auditModal.perfectStockTitle}
                   </span>
                 )}
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer"
                 >
                   {t.common.close}
                 </button>
@@ -774,9 +774,9 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                   type="button"
                   disabled={isReconciling || totalDiscrepancies === 0}
                   onClick={handleApplyStocktake}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-950 bg-gradient-to-r from-amber-400 via-orange-400 to-amber-300 hover:from-amber-300 hover:to-orange-300 shadow-lg shadow-amber-500/20 active:scale-[0.98] transition-all cursor-pointer disabled:opacity-40"
+                  className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 shadow-xs transition-colors cursor-pointer disabled:opacity-40"
                 >
-                  <ShieldCheck className="w-4 h-4 stroke-[2.5]" />
+                  <ShieldCheck className="w-4 h-4" />
                   <span>
                     {isReconciling
                       ? t.common.loading

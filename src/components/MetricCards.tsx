@@ -52,27 +52,28 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
   return (
     <div className="space-y-3">
       {/* Timeframe Filter Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 px-1">
-        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
-          <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
+          <Calendar className="w-3.5 h-3.5 text-slate-700" />
           <span>{t.metrics.financialOverview}</span>
           {isPeriodActive && (
-            <span className="text-[10px] lowercase font-normal px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+            <span className="text-[10px] lowercase font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
               {getTimeframeLabel(timeframe)}
             </span>
           )}
         </div>
 
         {/* Timeframe Pills */}
-        <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 p-1 rounded-xl shadow-inner self-start sm:self-auto">
+        <div className="flex items-center gap-1 bg-white border border-slate-200 p-1 rounded-xl shadow-xs self-start sm:self-auto">
           {(['today', 'this_week', 'this_month', 'all_time'] as TimeframePeriod[]).map((period) => (
             <button
               key={period}
+              type="button"
               onClick={() => onTimeframeChange(period)}
-              className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+              className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                 timeframe === period
-                  ? 'bg-emerald-500 text-slate-950 font-bold shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  ? 'bg-slate-900 text-white font-semibold shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
               {getTimeframeLabel(period)}
@@ -82,83 +83,67 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
       </div>
 
       {/* Main KPI Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {/* 1. Net Realized Profit / Loss */}
-        <div
-          className={`relative overflow-hidden rounded-2xl p-5 border transition-all duration-200 shadow-lg ${
-            isProfitable
-              ? 'bg-gradient-to-br from-emerald-950/40 via-slate-900 to-slate-900 border-emerald-500/30 shadow-emerald-950/20'
-              : isLoss
-              ? 'bg-gradient-to-br from-rose-950/40 via-slate-900 to-slate-900 border-rose-500/30 shadow-rose-950/20'
-              : 'bg-slate-900 border-slate-800'
-          }`}
-        >
+        <div className="relative overflow-hidden rounded-xl p-4 bg-white border border-slate-200 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
               {displayExpenses > 0 ? t.metrics.trueNetProfit : (isLoss ? t.metrics.netLoss : t.metrics.trueNetProfit)}
             </span>
-            <div
-              className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                isProfitable
-                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                  : isLoss
-                  ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
-                  : 'bg-slate-800 text-slate-400 border border-slate-700'
-              }`}
-            >
+            <div className="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 border border-slate-200 flex items-center justify-center">
               {isProfitable ? (
-                <TrendingUp className="w-5 h-5" />
+                <TrendingUp className="w-4 h-4 text-emerald-600" />
               ) : isLoss ? (
-                <TrendingDown className="w-5 h-5" />
+                <TrendingDown className="w-4 h-4 text-rose-600" />
               ) : (
-                <DollarSign className="w-5 h-5" />
+                <DollarSign className="w-4 h-4 text-slate-600" />
               )}
             </div>
           </div>
 
-          <div className="mt-3">
+          <div className="mt-2">
             <div
-              className={`text-2xl lg:text-3xl font-black tracking-tight ${
+              className={`text-2xl font-bold tracking-tight ${
                 isProfitable
-                  ? 'text-emerald-400'
+                  ? 'text-emerald-600'
                   : isLoss
-                  ? 'text-rose-400'
-                  : 'text-slate-200'
+                  ? 'text-rose-600'
+                  : 'text-slate-900'
               }`}
             >
               {profitMeta.text}
             </div>
 
             {displayExpenses > 0 ? (
-              <div className="flex items-center gap-1.5 text-[11px] text-slate-400 mt-1 flex-wrap">
-                <span className="text-emerald-400/90 font-medium">{t.metrics.grossProfit}: +{formatBirr(displayGrossProfit)}</span>
-                <span className="text-slate-600">•</span>
-                <span className="text-rose-400 font-medium">{t.metrics.overhead}: -{formatBirr(displayExpenses)}</span>
+              <div className="flex items-center gap-1.5 text-[11px] text-slate-500 mt-1 flex-wrap">
+                <span className="text-emerald-700 font-medium">{t.metrics.grossProfit}: +{formatBirr(displayGrossProfit)}</span>
+                <span className="text-slate-300">•</span>
+                <span className="text-rose-700 font-medium">{t.metrics.overhead}: -{formatBirr(displayExpenses)}</span>
               </div>
             ) : (
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-500 mt-0.5">
                 {displaySoldCount} {t.metrics.realizedRevenue} {isPeriodActive ? `(${getTimeframeLabel(timeframe).toLowerCase()})` : ''}
               </p>
             )}
           </div>
 
-          <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
-            <div className="flex items-center gap-1.5">
-              <span className="text-slate-400">{t.metrics.margin}:</span>
+          <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
+            <div className="flex items-center gap-1">
+              <span className="text-slate-500">{t.metrics.margin}:</span>
               <span
                 className={`font-semibold flex items-center ${
-                  displayMargin >= 0 ? 'text-emerald-400' : 'text-rose-400'
+                  displayMargin >= 0 ? 'text-emerald-600' : 'text-rose-600'
                 }`}
               >
                 {displayMargin >= 0 ? <ArrowUpRight className="w-3 h-3 mr-0.5" /> : <ArrowDownRight className="w-3 h-3 mr-0.5" />}
                 {displayMargin.toFixed(1)}%
               </span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-slate-400">{t.metrics.roi}:</span>
+            <div className="flex items-center gap-1">
+              <span className="text-slate-500">{t.metrics.roi}:</span>
               <span
                 className={`font-semibold ${
-                  displayRoi >= 0 ? 'text-emerald-400' : 'text-rose-400'
+                  displayRoi >= 0 ? 'text-emerald-600' : 'text-rose-600'
                 }`}
               >
                 {displayRoi.toFixed(1)}%
@@ -168,101 +153,101 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
         </div>
 
         {/* 2. Total Revenue */}
-        <div className="relative overflow-hidden rounded-2xl p-5 bg-gradient-to-br from-blue-950/30 via-slate-900 to-slate-900 border border-blue-500/20 shadow-lg shadow-blue-950/20">
+        <div className="relative overflow-hidden rounded-xl p-4 bg-white border border-slate-200 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-              {t.metrics.revenueCostBreakdown} ({getTimeframeLabel(timeframe)})
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+              {t.metrics.revenueCostBreakdown}
             </span>
-            <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center">
-              <DollarSign className="w-5 h-5" />
+            <div className="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 border border-slate-200 flex items-center justify-center">
+              <DollarSign className="w-4 h-4 text-slate-700" />
             </div>
           </div>
 
-          <div className="mt-3">
-            <div className="text-2xl lg:text-3xl font-black tracking-tight text-white">
+          <div className="mt-2">
+            <div className="text-2xl font-bold tracking-tight text-slate-900">
               {formatBirr(displayRevenue)}
             </div>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-500 mt-0.5">
               {t.metrics.realizedRevenue}
             </p>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+          <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
             <span>{t.metrics.costOfSold}:</span>
-            <span className="font-semibold text-slate-300">
+            <span className="font-semibold text-slate-700">
               {formatBirr(displayCostOfSold)}
             </span>
           </div>
         </div>
 
         {/* 3. Active Stock Investment (Cost & Retail) */}
-        <div className="relative overflow-hidden rounded-2xl p-5 bg-gradient-to-br from-indigo-950/30 via-slate-900 to-slate-900 border border-indigo-500/20 shadow-lg shadow-indigo-950/20">
+        <div className="relative overflow-hidden rounded-xl p-4 bg-white border border-slate-200 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
               {t.metrics.activeInventoryCost}
             </span>
-            <div className="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center">
-              <Package className="w-5 h-5" />
+            <div className="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 border border-slate-200 flex items-center justify-center">
+              <Package className="w-4 h-4 text-slate-700" />
             </div>
           </div>
 
-          <div className="mt-3">
-            <div className="text-2xl lg:text-3xl font-black tracking-tight text-white">
+          <div className="mt-2">
+            <div className="text-2xl font-bold tracking-tight text-slate-900">
               {formatBirr(metrics.activeInventoryCost)}
             </div>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-500 mt-0.5">
               {t.metrics.unrealizedPotential}
             </p>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
-            <span className="text-slate-400">{t.metrics.activeRetailValue}:</span>
-            <div className="flex items-center gap-1.5 font-semibold text-slate-200">
+          <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span className="text-slate-500">{t.metrics.activeRetailValue}:</span>
+            <div className="flex items-center gap-1.5 font-semibold text-slate-800">
               <span>{formatBirr(metrics.activeInventoryRetailValue)}</span>
-              <span className="text-[10px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded border border-teal-500/20">
+              <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1 py-0.2 rounded border border-emerald-200">
                 +{formatBirr(metrics.potentialProfit, { compact: true })}
               </span>
             </div>
           </div>
         </div>
 
-        {/* 4. Equipment Count Balance & Low Stock Alerts */}
-        <div className="relative overflow-hidden rounded-2xl p-5 bg-gradient-to-br from-violet-950/30 via-slate-900 to-slate-900 border border-violet-500/20 shadow-lg shadow-violet-950/20">
+        {/* 4. Equipment Count Balance & Stock Indicators */}
+        <div className="relative overflow-hidden rounded-xl p-4 bg-white border border-slate-200 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
               {t.metrics.equipmentCountBalance}
             </span>
-            <div className="w-9 h-9 rounded-xl bg-violet-500/10 text-violet-400 border border-violet-500/20 flex items-center justify-center">
-              <Layers className="w-5 h-5" />
+            <div className="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 border border-slate-200 flex items-center justify-center">
+              <Layers className="w-4 h-4 text-slate-700" />
             </div>
           </div>
 
-          <div className="mt-3">
-            <div className="text-2xl lg:text-3xl font-black tracking-tight text-white flex items-baseline gap-2">
+          <div className="mt-2">
+            <div className="text-2xl font-bold tracking-tight text-slate-900 flex items-baseline gap-1.5">
               <span>{metrics.totalStockUnits}</span>
-              <span className="text-sm font-normal text-slate-400">{t.metrics.totalUnitsInShop}</span>
+              <span className="text-xs font-normal text-slate-500">{t.metrics.totalUnitsInShop}</span>
             </div>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-500 mt-0.5">
               {metrics.inStockCount} {t.metrics.inStockOk} ({metrics.soldCount} {t.statuses.sold.toLowerCase()})
             </p>
           </div>
 
           {/* Interactive Stock Health Pills */}
-          <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between gap-1 text-xs">
+          <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between gap-1 text-xs">
             {/* Low Stock Badge */}
             <button
               type="button"
               onClick={() => onSelectStockFilter && onSelectStockFilter(activeStockFilter === 'low_stock' ? 'all' : 'low_stock')}
-              className={`flex items-center gap-1 px-2 py-0.5 rounded-md font-semibold transition-all cursor-pointer ${
-                metrics.lowStockCount > 0
-                  ? activeStockFilter === 'low_stock'
-                    ? 'bg-amber-500 text-slate-950 border border-amber-400 font-bold'
-                    : 'bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25'
-                  : 'bg-slate-800 text-slate-400'
+              className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-medium transition-colors cursor-pointer ${
+                activeStockFilter === 'low_stock'
+                  ? 'bg-slate-900 text-white font-semibold'
+                  : metrics.lowStockCount > 0
+                  ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                  : 'text-slate-400'
               }`}
-              title="Click to view items running low (≤ 2 units)"
+              title="≤ 2 units remaining"
             >
-              <AlertTriangle className="w-3 h-3 flex-shrink-0" />
+              <AlertTriangle className="w-3 h-3 shrink-0" />
               <span>{metrics.lowStockCount} {t.metrics.lowStockAlert}</span>
             </button>
 
@@ -270,16 +255,16 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
             <button
               type="button"
               onClick={() => onSelectStockFilter && onSelectStockFilter(activeStockFilter === 'out_of_stock' ? 'all' : 'out_of_stock')}
-              className={`flex items-center gap-1 px-2 py-0.5 rounded-md font-semibold transition-all cursor-pointer ${
-                metrics.outOfStockCount > 0
-                  ? activeStockFilter === 'out_of_stock'
-                    ? 'bg-rose-500 text-slate-950 border border-rose-400 font-bold'
-                    : 'bg-rose-500/15 text-rose-300 border border-rose-500/30 hover:bg-rose-500/25'
-                  : 'bg-slate-800 text-slate-400'
+              className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-medium transition-colors cursor-pointer ${
+                activeStockFilter === 'out_of_stock'
+                  ? 'bg-slate-900 text-white font-semibold'
+                  : metrics.outOfStockCount > 0
+                  ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                  : 'text-slate-400'
               }`}
-              title="Click to view out of stock items"
+              title="0 units remaining"
             >
-              <AlertCircle className="w-3 h-3 flex-shrink-0" />
+              <AlertCircle className="w-3 h-3 shrink-0" />
               <span>{metrics.outOfStockCount} {t.metrics.outOfStockAlert}</span>
             </button>
 
@@ -287,15 +272,14 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
             <button
               type="button"
               onClick={() => onSelectStockFilter && onSelectStockFilter(activeStockFilter === 'in_stock' ? 'all' : 'in_stock')}
-              className={`flex items-center gap-1 px-2 py-0.5 rounded-md font-medium transition-all cursor-pointer ${
+              className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-medium transition-colors cursor-pointer ${
                 activeStockFilter === 'in_stock'
-                  ? 'bg-emerald-500 text-slate-950 font-bold'
-                  : 'text-emerald-400 hover:bg-emerald-500/10'
+                  ? 'bg-slate-900 text-white font-semibold'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
-              title="Click to view all in-stock items"
             >
-              <CheckCircle2 className="w-3 h-3 flex-shrink-0" />
-              <span>{metrics.inStockCount} {t.metrics.inStockOk}</span>
+              <CheckCircle2 className="w-3 h-3 shrink-0 text-emerald-600" />
+              <span>{metrics.inStockCount}</span>
             </button>
           </div>
         </div>

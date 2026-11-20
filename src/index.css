@@ -4,39 +4,33 @@
 
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   body {
-    @apply antialiased bg-slate-950 text-slate-100 min-h-screen;
+    @apply antialiased bg-slate-50 text-slate-900 min-h-screen selection:bg-slate-200 selection:text-slate-900;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   }
 
-  /* Custom scrollbar */
+  /* Custom subtle scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #0f172a;
+    background: #f8fafc;
   }
   ::-webkit-scrollbar-thumb {
-    background: #334155;
+    background: #cbd5e1;
     border-radius: 4px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #475569;
+    background: #94a3b8;
   }
 }
 
 @layer utilities {
   .text-shadow-sm {
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-  }
-  .glass-panel {
-    background: rgba(30, 41, 59, 0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
   }
 }

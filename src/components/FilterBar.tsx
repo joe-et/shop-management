@@ -1,7 +1,6 @@
 import React from 'react';
 import { 
   Search, 
-  Plus, 
   ArrowUpDown, 
   Filter, 
   X,
@@ -17,7 +16,7 @@ import { useTranslation } from '../context/LanguageContext';
 interface FilterBarProps {
   filters: ItemFilters;
   onFilterChange: (filters: ItemFilters) => void;
-  onOpenAddItem: () => void;
+  onOpenAddItem?: () => void;
   counts: {
     all: number;
     in_stock: number;
@@ -30,7 +29,6 @@ interface FilterBarProps {
 export const FilterBar: React.FC<FilterBarProps> = ({
   filters,
   onFilterChange,
-  onOpenAddItem,
   counts,
 }) => {
   const { t, getCategoryLabel } = useTranslation();
@@ -78,132 +76,138 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   const currentSortValue = `${filters.sortBy}:${filters.sortOrder}`;
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-4 shadow-md">
-      {/* Top Row: Status Tabs & Add Button */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        {/* Status Pill Tabs */}
-        <div className="flex items-center gap-1.5 p-1 bg-slate-950/80 rounded-xl border border-slate-800 overflow-x-auto">
+    <div className="bg-white border border-slate-200 rounded-xl p-2.5 space-y-2 shadow-xs">
+      {/* Top Row: Compact Status Tabs */}
+      <div className="flex items-center justify-between gap-2 overflow-x-auto pb-0.5">
+        <div className="flex items-center gap-1">
+          {/* All */}
           <button
+            type="button"
             onClick={() => handleStatusTab('all')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all whitespace-nowrap cursor-pointer ${
               filters.status === 'all'
-                ? 'bg-slate-800 text-white shadow-sm border border-slate-700 font-semibold'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
+                ? 'bg-slate-900 text-white font-semibold shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
             <span>{t.filters.tabAll}</span>
-            <span className="ml-1 text-[10px] px-1.5 py-0.2 rounded-full bg-slate-700/60 text-slate-300">
+            <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+              filters.status === 'all' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-600'
+            }`}>
               {counts.all}
             </span>
           </button>
 
+          {/* In Stock */}
           <button
+            type="button"
             onClick={() => handleStatusTab('in_stock')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all whitespace-nowrap cursor-pointer ${
               filters.status === 'in_stock'
-                ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-600/50 shadow-sm font-semibold'
-                : 'text-slate-400 hover:text-emerald-300 hover:bg-slate-900/50'
+                ? 'bg-slate-900 text-white font-semibold shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
           >
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+            <CheckCircle2 className={`w-3.5 h-3.5 ${filters.status === 'in_stock' ? 'text-emerald-400' : 'text-emerald-600'}`} />
             <span>{t.filters.tabInStock}</span>
-            <span className="ml-1 text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-900/60 text-emerald-300">
+            <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+              filters.status === 'in_stock' ? 'bg-slate-800 text-emerald-300' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+            }`}>
               {counts.in_stock}
             </span>
           </button>
 
+          {/* Low Stock */}
           <button
+            type="button"
             onClick={() => handleStatusTab('low_stock')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all whitespace-nowrap cursor-pointer ${
               filters.status === 'low_stock'
-                ? 'bg-amber-950/80 text-amber-300 border border-amber-500/50 shadow-sm font-semibold'
-                : 'text-slate-400 hover:text-amber-300 hover:bg-slate-900/50'
+                ? 'bg-slate-900 text-white font-semibold shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
-            title="Items with low stock (≤ 2 units remaining)"
+            title="≤ 2 units remaining"
           >
-            <AlertTriangle className={`w-3.5 h-3.5 ${counts.low_stock > 0 ? 'text-amber-400 animate-pulse' : 'text-slate-400'}`} />
+            <AlertTriangle className={`w-3.5 h-3.5 ${filters.status === 'low_stock' ? 'text-amber-400' : 'text-amber-500'}`} />
             <span>{t.filters.tabLowStock}</span>
-            <span className={`ml-1 text-[10px] px-1.5 py-0.2 rounded-full ${
-              counts.low_stock > 0 ? 'bg-amber-900/80 text-amber-200 font-bold' : 'bg-slate-800 text-slate-400'
+            <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+              filters.status === 'low_stock' ? 'bg-slate-800 text-amber-300' : 'bg-amber-50 text-amber-700 border border-amber-200'
             }`}>
               {counts.low_stock}
             </span>
           </button>
 
+          {/* Out of Stock */}
           <button
+            type="button"
             onClick={() => handleStatusTab('out_of_stock')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all whitespace-nowrap cursor-pointer ${
               filters.status === 'out_of_stock'
-                ? 'bg-rose-950/80 text-rose-300 border border-rose-500/50 shadow-sm font-semibold'
-                : 'text-slate-400 hover:text-rose-300 hover:bg-slate-900/50'
+                ? 'bg-slate-900 text-white font-semibold shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
-            title="Items with 0 units remaining"
           >
-            <AlertCircle className={`w-3.5 h-3.5 ${counts.out_of_stock > 0 ? 'text-rose-400' : 'text-slate-400'}`} />
+            <AlertCircle className={`w-3.5 h-3.5 ${filters.status === 'out_of_stock' ? 'text-rose-400' : 'text-rose-500'}`} />
             <span>{t.filters.tabOutOfStock}</span>
-            <span className={`ml-1 text-[10px] px-1.5 py-0.2 rounded-full ${
-              counts.out_of_stock > 0 ? 'bg-rose-900/80 text-rose-200 font-bold' : 'bg-slate-800 text-slate-400'
+            <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+              filters.status === 'out_of_stock' ? 'bg-slate-800 text-rose-300' : 'bg-rose-50 text-rose-700 border border-rose-200'
             }`}>
               {counts.out_of_stock}
             </span>
           </button>
 
+          {/* Sold */}
           <button
+            type="button"
             onClick={() => handleStatusTab('sold')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all whitespace-nowrap cursor-pointer ${
               filters.status === 'sold'
-                ? 'bg-blue-950/80 text-blue-300 border border-blue-600/50 shadow-sm font-semibold'
-                : 'text-slate-400 hover:text-blue-300 hover:bg-slate-900/50'
+                ? 'bg-slate-900 text-white font-semibold shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
           >
-            <Archive className="w-3.5 h-3.5 text-blue-400" />
+            <Archive className="w-3.5 h-3.5 text-slate-500" />
             <span>{t.filters.tabSold}</span>
-            <span className="ml-1 text-[10px] px-1.5 py-0.2 rounded-full bg-blue-900/60 text-blue-300">
+            <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+              filters.status === 'sold' ? 'bg-slate-800 text-slate-300' : 'bg-slate-100 text-slate-600'
+            }`}>
               {counts.sold}
             </span>
           </button>
         </div>
-
-        {/* Add Equipment CTA Button */}
-        <button
-          onClick={onOpenAddItem}
-          className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-950 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 shadow-md shadow-emerald-500/20 active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap"
-        >
-          <Plus className="w-4 h-4 stroke-[2.5]" />
-          <span>{t.common.newArrival}</span>
-        </button>
       </div>
 
       {/* Bottom Row: Search, Category Filter, and Sort Selector */}
-      <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-12 gap-2 pt-1 border-t border-slate-100">
         {/* Search Bar (Span 6) */}
         <div className="sm:col-span-6 relative">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             value={filters.search}
             onChange={handleSearchChange}
             placeholder={t.filters.searchPlaceholder}
-            className="w-full pl-10 pr-9 py-2 rounded-xl bg-slate-950/80 border border-slate-800 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all"
+            className="w-full pl-8 pr-7 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors"
           />
           {filters.search && (
             <button
+              type="button"
               onClick={clearSearch}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 p-0.5 rounded-md"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 rounded cursor-pointer"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3.5 h-3.5" />
             </button>
           )}
         </div>
 
         {/* Category Dropdown (Span 3) */}
         <div className="sm:col-span-3 relative">
-          <Filter className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Filter className="w-3 h-3 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <select
             value={filters.category}
             onChange={handleCategoryChange}
-            className="w-full pl-8 pr-8 py-2 rounded-xl bg-slate-950/80 border border-slate-800 text-xs sm:text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all appearance-none cursor-pointer"
+            className="w-full pl-7 pr-6 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors appearance-none cursor-pointer"
           >
             <option value="all">{t.filters.categoryAll}</option>
             {ITEM_CATEGORIES.map((cat) => (
@@ -212,18 +216,18 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               </option>
             ))}
           </select>
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500 text-xs">
+          <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-[10px]">
             ▼
           </div>
         </div>
 
         {/* Sort Selector (Span 3) */}
         <div className="sm:col-span-3 relative">
-          <ArrowUpDown className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <ArrowUpDown className="w-3 h-3 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <select
             value={currentSortValue}
             onChange={handleSortChange}
-            className="w-full pl-8 pr-8 py-2 rounded-xl bg-slate-950/80 border border-slate-800 text-xs sm:text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all appearance-none cursor-pointer"
+            className="w-full pl-7 pr-6 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors appearance-none cursor-pointer"
           >
             <option value="created_at:desc">{t.filters.sortLatest}</option>
             <option value="created_at:asc">{t.filters.sortLatest} (Oldest)</option>
@@ -237,7 +241,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             <option value="name:desc">{t.filters.sortName} (Z → A)</option>
             <option value="quantity:desc">{t.filters.sortQuantity}</option>
           </select>
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500 text-xs">
+          <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-[10px]">
             ▼
           </div>
         </div>

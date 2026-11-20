@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { 
-  PackagePlus, 
   Plus, 
   SlidersHorizontal,
-  Check
+  Check,
+  Zap
 } from 'lucide-react';
 import { EquipmentItemInput, ITEM_CATEGORIES, STANDARD_UNITS } from '../types/inventory';
 import { formatBirr, formatPercentage } from '../utils/formatters';
@@ -77,37 +77,33 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
   };
 
   return (
-    <div className="bg-slate-900/90 border border-emerald-500/30 rounded-2xl p-4 shadow-lg shadow-emerald-950/20 backdrop-blur-sm">
+    <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-xs">
       {/* Header bar of Quick Add */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
-            <PackagePlus className="w-4 h-4" />
-          </div>
-          <div>
-            <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <span>{t.quickAdd.title}</span>
-              <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 lowercase">
-                {t.quickAdd.rapidIntake}
-              </span>
-            </h3>
-          </div>
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <Zap className="w-3.5 h-3.5 text-slate-700" />
+          <h3 className="text-xs font-semibold text-slate-800 tracking-tight flex items-center gap-1.5">
+            <span>{t.quickAdd.title}</span>
+            <span className="text-[10px] font-medium text-slate-500 bg-slate-100 px-1.5 py-0.2 rounded border border-slate-200">
+              {t.quickAdd.rapidIntake}
+            </span>
+          </h3>
         </div>
 
         <button
           type="button"
           onClick={onOpenFullModal}
-          className="text-xs text-slate-300 hover:text-white flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors font-medium border border-slate-700 cursor-pointer"
+          className="text-xs text-slate-600 hover:text-slate-900 flex items-center gap-1 font-medium transition-colors cursor-pointer"
           title={t.quickAdd.detailedForm}
         >
-          <SlidersHorizontal className="w-3.5 h-3.5 text-teal-400" />
+          <SlidersHorizontal className="w-3 h-3 text-slate-500" />
           <span>{t.quickAdd.detailedForm}</span>
         </button>
       </div>
 
-      {/* Form Fields */}
-      <form onSubmit={handleQuickSubmit} className="space-y-3">
-        <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+      {/* Form Fields - 1 Row Compact Grid */}
+      <form onSubmit={handleQuickSubmit} className="space-y-2">
+        <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
           {/* Equipment Name (Span 3) */}
           <div className="sm:col-span-3">
             <input
@@ -116,7 +112,7 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={t.quickAdd.namePlaceholder}
-              className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium"
+              className="w-full px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors font-medium"
             />
           </div>
 
@@ -125,7 +121,7 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-2.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+              className="w-full px-2 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors cursor-pointer"
             >
               {ITEM_CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
@@ -145,7 +141,7 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
               onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
               placeholder={t.common.quantity}
               title={t.quickAdd.qtyTitle}
-              className="w-full px-2 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm text-center font-bold text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-1.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-center font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors"
             />
           </div>
 
@@ -155,7 +151,7 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
               value={unit}
               onChange={(e) => setUnit(e.target.value)}
               title={t.quickAdd.unitTitle}
-              className="w-full px-1.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-cyan-400 font-semibold focus:outline-none focus:ring-2 focus:ring-cyan-500 cursor-pointer"
+              className="w-full px-1 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-700 font-medium focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors cursor-pointer"
             >
               {STANDARD_UNITS.map((u) => (
                 <option key={u.value} value={u.value}>
@@ -166,7 +162,7 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
           </div>
 
           {/* Purchase Price (Span 2) */}
-          <div className="sm:col-span-2 relative">
+          <div className="sm:col-span-2">
             <input
               type="number"
               step="any"
@@ -177,12 +173,12 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
                 setPurchasePrice(e.target.value === '' ? '' : parseFloat(e.target.value) || 0)
               }
               placeholder={t.quickAdd.costPlaceholder}
-              className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 font-medium focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors"
             />
           </div>
 
           {/* Selling Price (Span 2) */}
-          <div className="sm:col-span-2 relative">
+          <div className="sm:col-span-2">
             <input
               type="number"
               step="any"
@@ -193,24 +189,24 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
                 setRetailPrice(e.target.value === '' ? '' : parseFloat(e.target.value) || 0)
               }
               placeholder={t.quickAdd.sellPlaceholder}
-              className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="w-full px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 font-medium focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors"
             />
           </div>
 
-          {/* Submit Button (Span 1) */}
+          {/* Submit Button (Span 1) - Reserved Black CTA */}
           <div className="sm:col-span-1 flex items-center">
             <button
               type="submit"
               disabled={isSubmitting || !name.trim()}
-              className={`w-full flex items-center justify-center gap-1 px-2 py-2 rounded-xl text-xs font-bold text-slate-950 transition-all cursor-pointer shadow-md disabled:opacity-50 ${
+              className={`w-full flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg text-xs font-semibold text-white transition-all cursor-pointer shadow-xs disabled:opacity-40 ${
                 successPing
-                  ? 'bg-emerald-300 shadow-emerald-400/40 scale-[0.98]'
-                  : 'bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 shadow-emerald-500/20 active:scale-[0.98]'
+                  ? 'bg-emerald-600'
+                  : 'bg-slate-900 hover:bg-slate-800'
               }`}
               title={t.quickAdd.addStock}
             >
               {successPing ? (
-                <Check className="w-4 h-4 text-slate-950" />
+                <Check className="w-3.5 h-3.5 text-white stroke-[2.5]" />
               ) : (
                 <>
                   <Plus className="w-3.5 h-3.5" />
@@ -223,25 +219,25 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
 
         {/* Real-time Calculation Micro-banner */}
         {(numPurchase > 0 || numRetail > 0) && (
-          <div className="flex items-center justify-between text-[11px] pt-1 text-slate-400 px-1">
+          <div className="flex items-center justify-between text-[11px] pt-0.5 text-slate-500 px-1 border-t border-slate-100">
             <div className="flex items-center gap-2">
               <span>{t.quickAdd.expectedProfit}:</span>
               <span
-                className={`font-bold ${
+                className={`font-semibold ${
                   unitProfit > 0
-                    ? 'text-emerald-400'
+                    ? 'text-emerald-600'
                     : unitProfit < 0
-                    ? 'text-rose-400'
-                    : 'text-slate-400'
+                    ? 'text-rose-600'
+                    : 'text-slate-600'
                 }`}
               >
                 {unitProfit > 0 ? `+${formatBirr(unitProfit)}` : formatBirr(unitProfit)}
               </span>
-              <span className="text-slate-500">
+              <span className="text-slate-400">
                 ({formatPercentage(marginPercent)} margin)
               </span>
             </div>
-            <span className="text-slate-500">
+            <span className="text-slate-400 text-[10px]">
               {t.quickAdd.autoRegisters}
             </span>
           </div>

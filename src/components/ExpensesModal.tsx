@@ -126,59 +126,59 @@ export const ExpensesModal: React.FC<ExpensesModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
       <div 
-        className="w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
+        className="w-full max-w-4xl bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[92vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/70">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-500/20 to-orange-500/20 border border-rose-500/30 text-rose-400 flex items-center justify-center shadow-inner">
-              <Receipt className="w-5 h-5" />
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-200 bg-slate-50">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-xs">
+              <Receipt className="w-4 h-4 stroke-[2.2]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold text-white">
+                <h3 className="text-sm sm:text-base font-bold text-slate-900">
                   {t.expensesModal.modalTitle}
                 </h3>
-                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-300 border border-rose-500/20 flex items-center gap-1">
-                  <TrendingDown className="w-3 h-3 text-rose-400" />
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 flex items-center gap-1">
+                  <TrendingDown className="w-3 h-3 text-rose-600" />
                   {t.expensesModal.totalOverhead}: {formatBirr(totalExpenseAmount)}
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 {t.expensesModal.modalSubtitle}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Body */}
-        <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
           {/* Quick Expense Form */}
           <form 
             onSubmit={handleSubmit}
-            className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 space-y-3.5 shadow-sm"
+            className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-3"
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-                <Plus className="w-4 h-4 text-emerald-400" />
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                <Plus className="w-3.5 h-3.5 text-slate-800" />
                 {t.expensesModal.logNewExpense}
               </span>
-              <span className="text-[11px] text-slate-500">{t.metrics.overhead}</span>
+              <span className="text-[11px] text-slate-400">{t.metrics.overhead}</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
               {/* Title (Span 5) */}
               <div className="sm:col-span-5">
-                <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                <label className="block text-[11px] font-medium text-slate-700 mb-1">
                   {t.expensesModal.expenseTitle} *
                 </label>
                 <input
@@ -187,19 +187,19 @@ export const ExpensesModal: React.FC<ExpensesModalProps> = ({
                   placeholder={t.expensesModal.expenseTitlePlaceholder}
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs sm:text-sm text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+                  className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
                 />
               </div>
 
               {/* Category (Span 3) */}
               <div className="sm:col-span-3">
-                <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                <label className="block text-[11px] font-medium text-slate-700 mb-1">
                   {t.expensesModal.category} *
                 </label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value as ExpenseCategory)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs sm:text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500 cursor-pointer"
+                  className="w-full px-2 py-1.5 rounded-lg bg-white border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-900 cursor-pointer"
                 >
                   {EXPENSE_CATEGORIES.map((cat) => (
                     <option key={cat} value={cat}>
@@ -211,11 +211,11 @@ export const ExpensesModal: React.FC<ExpensesModalProps> = ({
 
               {/* Amount (Span 4) */}
               <div className="sm:col-span-4">
-                <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                <label className="block text-[11px] font-medium text-slate-700 mb-1">
                   {t.expensesModal.amount} ({t.common.currencyName}) *
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-rose-400 font-bold text-xs">
+                  <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-xs">
                     {t.common.currencySymbol}
                   </span>
                   <input
@@ -226,39 +226,39 @@ export const ExpensesModal: React.FC<ExpensesModalProps> = ({
                     placeholder="0.00"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value === '' ? '' : parseFloat(e.target.value) || 0)}
-                    className="w-full pl-8 pr-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs sm:text-sm font-bold text-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    className="w-full pl-8 pr-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-semibold text-rose-600 focus:outline-none focus:ring-1 focus:ring-slate-900"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+            <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-end">
               {/* Date (Span 3) */}
               <div className="sm:col-span-3">
-                <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                <label className="block text-[11px] font-medium text-slate-700 mb-1">
                   {t.expensesModal.expenseDate}
                 </label>
                 <div className="relative">
-                  <Calendar className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <Calendar className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="date"
                     required
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="w-full pl-8 pr-2 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    className="w-full pl-7 pr-2 py-1.5 rounded-lg bg-white border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-900"
                   />
                 </div>
               </div>
 
               {/* Payment Method (Span 3) */}
               <div className="sm:col-span-3">
-                <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                <label className="block text-[11px] font-medium text-slate-700 mb-1">
                   {t.expensesModal.paymentMethod}
                 </label>
                 <select
                   value={paymentMethod}
                   onChange={(e) => setPaymentMethod(e.target.value as any)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500 cursor-pointer"
+                  className="w-full px-2 py-1.5 rounded-lg bg-white border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-900 cursor-pointer"
                 >
                   <option value="Cash">{getPaymentMethodLabel('Cash')}</option>
                   <option value="Telebirr">{getPaymentMethodLabel('Telebirr')}</option>
@@ -269,7 +269,7 @@ export const ExpensesModal: React.FC<ExpensesModalProps> = ({
 
               {/* Optional Notes (Span 4) */}
               <div className="sm:col-span-4">
-                <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                <label className="block text-[11px] font-medium text-slate-700 mb-1">
                   {t.expensesModal.notes}
                 </label>
                 <input
@@ -277,7 +277,7 @@ export const ExpensesModal: React.FC<ExpensesModalProps> = ({
                   placeholder={t.expensesModal.notesPlaceholder}
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-slate-300 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                  className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-900"
                 />
               </div>
 
@@ -286,7 +286,7 @@ export const ExpensesModal: React.FC<ExpensesModalProps> = ({
                 <button
                   type="submit"
                   disabled={isSubmitting || !title || !amount}
-                  className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-400 hover:to-orange-400 text-white font-bold text-xs shadow-md shadow-rose-950/40 transition-all disabled:opacity-50 cursor-pointer"
+                  className="w-full py-1.5 px-3 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs shadow-xs transition-colors disabled:opacity-40 cursor-pointer"
                 >
                   {isSubmitting ? t.common.loading : t.expensesModal.recordExpenseButton}
                 </button>
@@ -295,23 +295,23 @@ export const ExpensesModal: React.FC<ExpensesModalProps> = ({
           </form>
 
           {/* Filter Bar & Export */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-1">
             <div className="flex items-center gap-2 flex-1 max-w-md">
               <div className="relative flex-1">
-                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   placeholder={t.expensesModal.searchExpensesPlaceholder}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                  className="w-full pl-7 pr-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900"
                 />
               </div>
 
               <select
                 value={selectedCategoryFilter}
                 onChange={(e) => setSelectedCategoryFilter(e.target.value)}
-                className="px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-xs text-slate-300 focus:outline-none cursor-pointer"
+                className="px-2 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-700 focus:outline-none cursor-pointer"
               >
                 <option value="all">{t.expensesModal.allCategories}</option>
                 {EXPENSE_CATEGORIES.map((c) => (
@@ -323,64 +323,64 @@ export const ExpensesModal: React.FC<ExpensesModalProps> = ({
             <button
               onClick={handleExportCsv}
               disabled={expenses.length === 0}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors disabled:opacity-50 cursor-pointer self-start sm:self-auto"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 transition-colors disabled:opacity-40 cursor-pointer self-start sm:self-auto"
             >
-              <Download className="w-3.5 h-3.5 text-rose-400" />
+              <Download className="w-3.5 h-3.5 text-slate-500" />
               <span>{t.common.exportCsv}</span>
             </button>
           </div>
 
           {/* Expense History Table */}
-          <div className="rounded-xl border border-slate-800 overflow-hidden bg-slate-950/50">
+          <div className="rounded-xl border border-slate-200 overflow-hidden bg-white">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-900/90 text-slate-400 uppercase text-[10px] font-semibold border-b border-slate-800">
+                <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] font-semibold border-b border-slate-200">
                   <tr>
-                    <th className="py-3 px-3.5">{t.expensesModal.expenseTitle}</th>
-                    <th className="py-3 px-3">{t.expensesModal.category}</th>
-                    <th className="py-3 px-3">{t.common.date}</th>
-                    <th className="py-3 px-3">{t.expensesModal.paymentMethod}</th>
-                    <th className="py-3 px-3 text-right">{t.expensesModal.amount}</th>
-                    <th className="py-3 px-3 text-center">{t.common.actions}</th>
+                    <th className="py-2.5 px-3.5">{t.expensesModal.expenseTitle}</th>
+                    <th className="py-2.5 px-3">{t.expensesModal.category}</th>
+                    <th className="py-2.5 px-3">{t.common.date}</th>
+                    <th className="py-2.5 px-3">{t.expensesModal.paymentMethod}</th>
+                    <th className="py-2.5 px-3 text-right">{t.expensesModal.amount}</th>
+                    <th className="py-2.5 px-3 text-center">{t.common.actions}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60">
+                <tbody className="divide-y divide-slate-100">
                   {filteredExpenses.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-8 text-center text-slate-500">
+                      <td colSpan={6} className="py-8 text-center text-slate-400">
                         {t.expensesModal.noExpensesFound}
                       </td>
                     </tr>
                   ) : (
                     filteredExpenses.map((exp) => (
-                      <tr key={exp.id} className="hover:bg-slate-900/50 transition-colors">
-                        <td className="py-3 px-3.5">
-                          <div className="font-semibold text-white">{exp.title}</div>
+                      <tr key={exp.id} className="hover:bg-slate-50/70 transition-colors">
+                        <td className="py-2.5 px-3.5">
+                          <div className="font-semibold text-slate-900">{exp.title}</div>
                           {exp.notes && (
                             <div className="text-[11px] text-slate-400 mt-0.5">{exp.notes}</div>
                           )}
                         </td>
-                        <td className="py-3 px-3 whitespace-nowrap">
-                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-slate-800 border border-slate-700 text-slate-300 text-[11px]">
+                        <td className="py-2.5 px-3 whitespace-nowrap">
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-600 border border-slate-200">
                             {CATEGORY_ICONS[exp.category]}
                             <span>{getExpenseCategoryLabel(exp.category)}</span>
                           </span>
                         </td>
-                        <td className="py-3 px-3 text-slate-400 whitespace-nowrap">
+                        <td className="py-2.5 px-3 text-slate-500 whitespace-nowrap">
                           {formatDate(exp.date)}
                         </td>
-                        <td className="py-3 px-3 text-slate-400 whitespace-nowrap">
-                          <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px]">
+                        <td className="py-2.5 px-3 text-slate-500 whitespace-nowrap">
+                          <span className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px]">
                             {getPaymentMethodLabel(exp.payment_method)}
                           </span>
                         </td>
-                        <td className="py-3 px-3 text-right whitespace-nowrap font-bold text-rose-400">
+                        <td className="py-2.5 px-3 text-right whitespace-nowrap font-bold text-rose-600">
                           -{formatBirr(exp.amount)}
                         </td>
-                        <td className="py-3 px-3 text-center whitespace-nowrap">
+                        <td className="py-2.5 px-3 text-center whitespace-nowrap">
                           <button
                             onClick={() => onDeleteExpense(exp.id)}
-                            className="p-1 rounded text-slate-500 hover:text-rose-400 hover:bg-slate-800 transition-colors cursor-pointer"
+                            className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
                             title={t.expensesModal.deleteExpenseConfirm}
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -396,14 +396,14 @@ export const ExpensesModal: React.FC<ExpensesModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-6 py-3.5 border-t border-slate-800 bg-slate-950/80 text-xs text-slate-400">
+        <div className="flex items-center justify-between px-5 py-2.5 border-t border-slate-200 bg-slate-50 text-xs text-slate-500">
           <div>
-            Showing <span className="font-semibold text-slate-200">{filteredExpenses.length}</span> of{' '}
-            <span className="font-semibold text-slate-200">{expenses.length}</span> recorded expenses
+            Showing <span className="font-semibold text-slate-800">{filteredExpenses.length}</span> of{' '}
+            <span className="font-semibold text-slate-800">{expenses.length}</span> recorded expenses
           </div>
           <button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold transition-colors cursor-pointer"
+            className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 font-medium transition-colors cursor-pointer"
           >
             {t.common.close}
           </button>

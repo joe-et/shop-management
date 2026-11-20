@@ -34,6 +34,8 @@ export const enTranslations: TranslationDictionary = {
     revertToStock: 'Revert back to stock',
     currencySymbol: 'Br',
     currencyName: 'Ethiopian Birr',
+    workspaceCounter: 'Counter & Inventory',
+    workspaceReports: 'Financial Reports',
   },
 
   sync: {

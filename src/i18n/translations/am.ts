@@ -34,6 +34,8 @@ export const amTranslations: TranslationDictionary = {
     revertToStock: 'ወደ ክምችት መልስ',
     currencySymbol: 'ብር',
     currencyName: 'የኢትዮጵያ ብር',
+    workspaceCounter: 'የሽያጭ ጠረጴዛ እና ክምችት',
+    workspaceReports: 'የፋይናንስ ሪፖርቶች',
   },
 
   sync: {

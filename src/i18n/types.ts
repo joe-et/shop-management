@@ -48,6 +48,8 @@ export interface TranslationDictionary {
     revertToStock: string;
     currencySymbol: string;
     currencyName: string;
+    workspaceCounter: string;
+    workspaceReports: string;
   };
 
   // Sync Pill

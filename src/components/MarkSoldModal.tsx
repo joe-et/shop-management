@@ -134,39 +134,39 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
   const unitLabel = numQtyToSell === 1 ? unitDisp.singular : unitDisp.plural;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
       <div 
-        className="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
+        className="w-full max-w-lg bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[92vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/60">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-200 bg-slate-50">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
-              <Receipt className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-xs">
+              <Receipt className="w-4 h-4 stroke-[2.2]" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">{t.soldModal.title}</h3>
-              <p className="text-xs text-slate-400">{t.soldModal.subtitle}</p>
+              <h3 className="text-sm sm:text-base font-bold text-slate-900">{t.soldModal.title}</h3>
+              <p className="text-xs text-slate-500">{t.soldModal.subtitle}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Body */}
-        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4">
+        <form onSubmit={handleSubmit} className="p-5 overflow-y-auto space-y-3.5">
           {/* Item Context Card */}
-          <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <h4 className="font-semibold text-white text-sm">{item.name}</h4>
-                <div className="flex items-center gap-2 text-xs text-slate-400 mt-0.5">
-                  <span className="text-slate-300 font-medium">{getCategoryLabel(item.category)}</span>
+                <h4 className="font-semibold text-slate-900 text-sm">{item.name}</h4>
+                <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-0.5">
+                  <span className="text-slate-700 font-medium">{getCategoryLabel(item.category)}</span>
                   <span>•</span>
                   <span>{item.brand}</span>
                   {item.model && <span>• {item.model}</span>}
@@ -174,47 +174,47 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
                 </div>
               </div>
               <div className="flex flex-col items-end">
-                <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-800 text-emerald-300 border border-emerald-500/30">
+                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                   {formatQtyWithUnit(availableQty, item.unit)} {t.soldModal.availableBadge}
                 </span>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 pt-2 mt-1 border-t border-slate-800/80 text-xs">
+            <div className="grid grid-cols-2 gap-3 pt-2 mt-1 border-t border-slate-200 text-xs">
               <div>
-                <span className="text-slate-500 block">{t.soldModal.unitCost}</span>
-                <span className="font-semibold text-slate-200">{formatBirr(purchasePrice)}</span>
+                <span className="text-slate-400 block text-[10px] uppercase font-semibold">{t.soldModal.unitCost}</span>
+                <span className="font-semibold text-slate-800">{formatBirr(purchasePrice)}</span>
               </div>
               <div>
-                <span className="text-slate-500 block">{t.soldModal.targetListedPrice}</span>
-                <span className="font-semibold text-teal-400">{formatBirr(retailPrice)}</span>
+                <span className="text-slate-400 block text-[10px] uppercase font-semibold">{t.soldModal.targetListedPrice}</span>
+                <span className="font-semibold text-slate-900">{formatBirr(retailPrice)}</span>
               </div>
             </div>
           </div>
 
           {/* QUANTITY TO SELL SECTION */}
-          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800/90 space-y-2.5">
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
-                <Boxes className="w-4 h-4 text-emerald-400" />
-                {t.soldModal.quantityToSell} ({unitDisp.label}) <span className="text-emerald-400">*</span>
+              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <Boxes className="w-3.5 h-3.5 text-slate-800" />
+                {t.soldModal.quantityToSell} ({unitDisp.label}) <span className="text-rose-500">*</span>
               </label>
-              <span className="text-xs text-slate-400">
-                {t.soldModal.maxUnits}: <strong className="text-white">{availableQty}</strong> {unitLabel}
+              <span className="text-xs text-slate-500">
+                {t.soldModal.maxUnits}: <strong className="text-slate-900">{availableQty}</strong> {unitLabel}
               </span>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               {/* Stepper Input */}
-              <div className="flex items-center bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-inner">
+              <div className="flex items-center bg-white border border-slate-200 rounded-lg overflow-hidden shadow-xs">
                 <button
                   type="button"
                   onClick={() => handleStepQty(-1)}
                   disabled={numQtyToSell <= 1}
-                  className="px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:hover:bg-transparent transition-colors cursor-pointer"
+                  className="px-2.5 py-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent transition-colors cursor-pointer"
                   title="Decrease quantity"
                 >
-                  <Minus className="w-4 h-4" />
+                  <Minus className="w-3.5 h-3.5" />
                 </button>
                 <input
                   type="number"
@@ -228,16 +228,16 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
                       setQuantityToSell(val);
                     }
                   }}
-                  className="w-16 text-center bg-transparent py-2 text-sm font-bold text-white focus:outline-none"
+                  className="w-14 text-center bg-transparent py-1.5 text-xs sm:text-sm font-bold text-slate-900 focus:outline-none"
                 />
                 <button
                   type="button"
                   onClick={() => handleStepQty(1)}
                   disabled={numQtyToSell >= availableQty}
-                  className="px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:hover:bg-transparent transition-colors cursor-pointer"
+                  className="px-2.5 py-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent transition-colors cursor-pointer"
                   title="Increase quantity"
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="w-3.5 h-3.5" />
                 </button>
               </div>
 
@@ -246,10 +246,10 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setQuantityToSell(1)}
-                  className={`text-xs px-2.5 py-1.5 rounded-lg border transition-all ${
+                  className={`text-xs px-2.5 py-1.5 rounded-lg border transition-all cursor-pointer ${
                     numQtyToSell === 1
-                      ? 'bg-emerald-950 text-emerald-300 border-emerald-600 font-bold'
-                      : 'bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-800'
+                      ? 'bg-slate-900 text-white border-slate-900 font-semibold'
+                      : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
                   }`}
                 >
                   {t.soldModal.presetOne}
@@ -259,10 +259,10 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setQuantityToSell(availableQty)}
-                    className={`text-xs px-2.5 py-1.5 rounded-lg border transition-all ${
+                    className={`text-xs px-2.5 py-1.5 rounded-lg border transition-all cursor-pointer ${
                       numQtyToSell === availableQty
-                        ? 'bg-emerald-950 text-emerald-300 border-emerald-600 font-bold'
-                        : 'bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-800'
+                        ? 'bg-slate-900 text-white border-slate-900 font-semibold'
+                        : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
                     }`}
                   >
                     {t.soldModal.presetAll} ({availableQty})
@@ -272,14 +272,14 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
             </div>
 
             {/* Dynamic Stock Deduction Explanation Pill */}
-            <div className="flex items-center gap-2 pt-1 text-xs">
-              <Info className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+            <div className="flex items-center gap-1.5 pt-0.5 text-xs">
+              <Info className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               {isPartialSale ? (
-                <span className="text-teal-300">
+                <span className="text-slate-700 font-medium">
                   {t.soldModal.partialSaleExplanation} ({numQtyToSell} {unitLabel} / {remainingStock} {t.statuses.in_stock})
                 </span>
               ) : (
-                <span className="text-slate-400">
+                <span className="text-slate-500">
                   {t.soldModal.fullSaleExplanation} ({availableQty} {unitLabel})
                 </span>
               )}
@@ -287,13 +287,13 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
           </div>
 
           {/* Pricing Input & Discount Feedback */}
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold text-slate-300">
-                {t.soldModal.sellingPricePerUnit} ({t.common.currencySymbol}) <span className="text-emerald-400">*</span>
+              <label className="text-xs font-semibold text-slate-700">
+                {t.soldModal.sellingPricePerUnit} ({t.common.currencySymbol}) <span className="text-rose-500">*</span>
               </label>
               {numQtyToSell > 1 && (
-                <span className="text-xs text-teal-400 font-medium">
+                <span className="text-xs text-slate-700 font-semibold">
                   {t.table.totalRevenue}: {formatBirr(totalSaleRevenue)}
                 </span>
               )}
@@ -310,16 +310,16 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
                 value={soldPrice || ''}
                 onChange={(e) => setSoldPrice(parseFloat(e.target.value) || 0)}
                 placeholder={t.soldModal.sellingPricePerUnit}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-lg font-bold text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full pl-9 pr-3 py-2 rounded-lg bg-slate-50 border border-slate-200 text-base font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900"
               />
             </div>
 
             {/* Quick Pricing Shortcuts */}
-            <div className="flex items-center gap-2 pt-1">
+            <div className="flex items-center gap-1.5 pt-0.5 flex-wrap">
               <button
                 type="button"
                 onClick={() => setSoldPrice(retailPrice)}
-                className="text-[11px] px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
+                className="text-[11px] px-2 py-0.5 rounded bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 transition-colors cursor-pointer"
               >
                 {t.soldModal.listedPriceRef} ({formatBirr(retailPrice, { compact: true })})
               </button>
@@ -327,7 +327,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setSoldPrice(Math.round(retailPrice * 0.95))}
-                  className="text-[11px] px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
+                  className="text-[11px] px-2 py-0.5 rounded bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 transition-colors cursor-pointer"
                 >
                   5% Discount
                 </button>
@@ -336,7 +336,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setSoldPrice(Math.round(retailPrice * 0.90))}
-                  className="text-[11px] px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
+                  className="text-[11px] px-2 py-0.5 rounded bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 transition-colors cursor-pointer"
                 >
                   10% Discount
                 </button>
@@ -344,7 +344,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
             </div>
 
             {isDiscounted && (
-              <div className="text-xs text-amber-400 flex items-center gap-1.5 pt-1">
+              <div className="text-xs text-amber-700 flex items-center gap-1.5 pt-0.5">
                 <Tag className="w-3.5 h-3.5" />
                 <span>
                   {t.soldModal.discountNotice}: {formatBirr(discountAmount)} ({((discountAmount / retailPrice) * 100).toFixed(1)}%)
@@ -354,117 +354,111 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
           </div>
 
           {/* Live Net Profit & Margin Preview Card */}
-          <div
-            className={`p-4 rounded-xl border transition-all ${
-              isProfitable
-                ? 'bg-emerald-950/40 border-emerald-500/30 text-emerald-300'
-                : isLoss
-                ? 'bg-rose-950/40 border-rose-500/30 text-rose-300'
-                : 'bg-slate-950 border-slate-800 text-slate-300'
-            }`}
-          >
+          <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs uppercase font-semibold tracking-wider text-slate-400">
+              <span className="text-xs uppercase font-semibold tracking-wider text-slate-500">
                 {t.metrics.trueNetProfit} ({numQtyToSell} {unitLabel})
               </span>
               <div className="flex items-center gap-1 text-xs font-bold">
                 {isProfitable ? (
-                  <TrendingUp className="w-4 h-4 text-emerald-400" />
+                  <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
                 ) : isLoss ? (
-                  <TrendingDown className="w-4 h-4 text-rose-400" />
+                  <TrendingDown className="w-3.5 h-3.5 text-rose-600" />
                 ) : null}
-                <span>{isProfitable ? t.metrics.trueNetProfit : isLoss ? t.metrics.netLoss : 'Break-Even'}</span>
+                <span className={isProfitable ? 'text-emerald-700' : isLoss ? 'text-rose-700' : 'text-slate-700'}>
+                  {isProfitable ? t.metrics.trueNetProfit : isLoss ? t.metrics.netLoss : 'Break-Even'}
+                </span>
               </div>
             </div>
 
-            <div className="mt-2 flex items-baseline justify-between">
+            <div className="flex items-baseline justify-between">
               <span
-                className={`text-2xl font-black ${
-                  isProfitable ? 'text-emerald-400' : isLoss ? 'text-rose-400' : 'text-slate-200'
+                className={`text-xl font-black ${
+                  isProfitable ? 'text-emerald-600' : isLoss ? 'text-rose-600' : 'text-slate-900'
                 }`}
               >
                 {totalSaleProfit >= 0 ? `+${formatBirr(totalSaleProfit)}` : formatBirr(totalSaleProfit)}
               </span>
-              <div className="text-right">
-                <span className="text-xs block text-slate-400">{t.metrics.margin} / {t.metrics.roi}</span>
-                <span className="text-sm font-bold">
+              <div className="text-right text-xs">
+                <span className="text-slate-400 block text-[10px]">{t.metrics.margin} / {t.metrics.roi}</span>
+                <span className="font-semibold text-slate-800">
                   {formatPercentage(marginPercent)} / {formatPercentage(roiPercent)}
                 </span>
               </div>
             </div>
 
             {/* Financial breakdown sub-bar */}
-            <div className="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+            <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
               <span>
-                {t.metrics.revenueCostBreakdown.split(' ')[0]}: <strong className="text-slate-200">{formatBirr(totalSaleRevenue)}</strong>
+                {t.metrics.revenueCostBreakdown.split(' ')[0]}: <strong className="text-slate-900 font-semibold">{formatBirr(totalSaleRevenue)}</strong>
               </span>
               <span>
-                {t.metrics.costOfSold}: <strong className="text-slate-200">{formatBirr(totalSaleCost)}</strong>
+                {t.metrics.costOfSold}: <strong className="text-slate-900 font-semibold">{formatBirr(totalSaleCost)}</strong>
               </span>
             </div>
 
             {isLoss && (
-              <div className="mt-2 text-xs flex items-center gap-1.5 text-rose-400">
-                <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" />
+              <div className="mt-1 text-xs flex items-center gap-1 text-rose-700">
+                <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
                 <span>{t.soldModal.lossWarning} ({formatBirr(purchasePrice)}).</span>
               </div>
             )}
           </div>
 
           {/* Date & Customer Information */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-medium text-slate-700 mb-1">
                 {t.soldModal.saleDate}
               </label>
               <div className="relative">
-                <Calendar className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Calendar className="w-4 h-4 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="date"
                   required
                   value={soldDate}
                   onChange={(e) => setSoldDate(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                  className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-medium text-slate-700 mb-1">
                 {t.soldModal.customerName} {t.soldModal.customerOptional}
               </label>
               <div className="relative">
-                <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <User className="w-4 h-4 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
                   placeholder={t.soldModal.customerNamePlaceholder}
-                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                  className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900"
                 />
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-medium text-slate-700 mb-1">
                 {t.soldModal.customerPhone} {t.soldModal.customerOptional}
               </label>
               <div className="relative">
-                <Phone className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Phone className="w-4 h-4 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={customerPhone}
                   onChange={(e) => setCustomerPhone(e.target.value)}
                   placeholder={t.soldModal.customerPhonePlaceholder}
-                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                  className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label className="block text-xs font-medium text-slate-700 mb-1">
                 {t.common.notes} {t.soldModal.customerOptional}
               </label>
               <input
@@ -472,31 +466,31 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
                 value={saleNotes}
                 onChange={(e) => setSaleNotes(e.target.value)}
                 placeholder="Payment method, CBE / Telebirr ID..."
-                className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                className="w-full px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900"
               />
             </div>
           </div>
 
           {error && (
-            <div className="p-3 rounded-xl bg-rose-950/50 border border-rose-800/60 text-xs text-rose-300">
+            <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-700">
               {error}
             </div>
           )}
 
           {/* Action Buttons */}
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-200">
             <button
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+              className="px-3.5 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer"
             >
               {t.common.cancel}
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-950 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 shadow-lg shadow-emerald-500/25 active:scale-[0.98] transition-all disabled:opacity-50 cursor-pointer"
+              className="px-4 py-2 rounded-lg text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 shadow-xs transition-colors cursor-pointer disabled:opacity-50"
             >
               {isSubmitting
                 ? t.common.loading
