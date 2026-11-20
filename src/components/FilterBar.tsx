@@ -12,6 +12,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { ItemFilters, ITEM_CATEGORIES } from '../types/inventory';
+import { useTranslation } from '../context/LanguageContext';
 
 interface FilterBarProps {
   filters: ItemFilters;
@@ -32,6 +33,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   onOpenAddItem,
   counts,
 }) => {
+  const { t, getCategoryLabel } = useTranslation();
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onFilterChange({
       ...filters,
@@ -89,7 +92,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
-            <span>All Items</span>
+            <span>{t.filters.tabAll}</span>
             <span className="ml-1 text-[10px] px-1.5 py-0.2 rounded-full bg-slate-700/60 text-slate-300">
               {counts.all}
             </span>
@@ -104,7 +107,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             }`}
           >
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-            <span>In Stock</span>
+            <span>{t.filters.tabInStock}</span>
             <span className="ml-1 text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-900/60 text-emerald-300">
               {counts.in_stock}
             </span>
@@ -120,7 +123,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             title="Items with low stock (≤ 2 units remaining)"
           >
             <AlertTriangle className={`w-3.5 h-3.5 ${counts.low_stock > 0 ? 'text-amber-400 animate-pulse' : 'text-slate-400'}`} />
-            <span>Low Stock</span>
+            <span>{t.filters.tabLowStock}</span>
             <span className={`ml-1 text-[10px] px-1.5 py-0.2 rounded-full ${
               counts.low_stock > 0 ? 'bg-amber-900/80 text-amber-200 font-bold' : 'bg-slate-800 text-slate-400'
             }`}>
@@ -138,7 +141,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             title="Items with 0 units remaining"
           >
             <AlertCircle className={`w-3.5 h-3.5 ${counts.out_of_stock > 0 ? 'text-rose-400' : 'text-slate-400'}`} />
-            <span>Out of Stock</span>
+            <span>{t.filters.tabOutOfStock}</span>
             <span className={`ml-1 text-[10px] px-1.5 py-0.2 rounded-full ${
               counts.out_of_stock > 0 ? 'bg-rose-900/80 text-rose-200 font-bold' : 'bg-slate-800 text-slate-400'
             }`}>
@@ -155,7 +158,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             }`}
           >
             <Archive className="w-3.5 h-3.5 text-blue-400" />
-            <span>Sold</span>
+            <span>{t.filters.tabSold}</span>
             <span className="ml-1 text-[10px] px-1.5 py-0.2 rounded-full bg-blue-900/60 text-blue-300">
               {counts.sold}
             </span>
@@ -168,7 +171,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-950 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 shadow-md shadow-emerald-500/20 active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap"
         >
           <Plus className="w-4 h-4 stroke-[2.5]" />
-          <span>Add Equipment</span>
+          <span>{t.common.newArrival}</span>
         </button>
       </div>
 
@@ -181,7 +184,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             type="text"
             value={filters.search}
             onChange={handleSearchChange}
-            placeholder="Search name, brand, model, serial #, buyer..."
+            placeholder={t.filters.searchPlaceholder}
             className="w-full pl-10 pr-9 py-2 rounded-xl bg-slate-950/80 border border-slate-800 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all"
           />
           {filters.search && (
@@ -202,10 +205,10 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             onChange={handleCategoryChange}
             className="w-full pl-8 pr-8 py-2 rounded-xl bg-slate-950/80 border border-slate-800 text-xs sm:text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all appearance-none cursor-pointer"
           >
-            <option value="all">All Categories</option>
+            <option value="all">{t.filters.categoryAll}</option>
             {ITEM_CATEGORIES.map((cat) => (
               <option key={cat} value={cat}>
-                {cat}
+                {getCategoryLabel(cat)}
               </option>
             ))}
           </select>
@@ -222,17 +225,17 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             onChange={handleSortChange}
             className="w-full pl-8 pr-8 py-2 rounded-xl bg-slate-950/80 border border-slate-800 text-xs sm:text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all appearance-none cursor-pointer"
           >
-            <option value="created_at:desc">Newest Added</option>
-            <option value="created_at:asc">Oldest Added</option>
-            <option value="retail_price:desc">Retail Price: High to Low</option>
-            <option value="retail_price:asc">Retail Price: Low to High</option>
-            <option value="purchase_price:desc">Cost: High to Low</option>
-            <option value="purchase_price:asc">Cost: Low to High</option>
-            <option value="profit:desc">Profit: Highest First</option>
-            <option value="profit:asc">Profit: Lowest First</option>
-            <option value="name:asc">Name: A to Z</option>
-            <option value="name:desc">Name: Z to A</option>
-            <option value="quantity:desc">Quantity: Highest</option>
+            <option value="created_at:desc">{t.filters.sortLatest}</option>
+            <option value="created_at:asc">{t.filters.sortLatest} (Oldest)</option>
+            <option value="retail_price:desc">{t.filters.sortPriceHighLow}</option>
+            <option value="retail_price:asc">{t.filters.sortPriceLowHigh}</option>
+            <option value="purchase_price:desc">{t.itemModal.purchasePricePerUnit}: High → Low</option>
+            <option value="purchase_price:asc">{t.itemModal.purchasePricePerUnit}: Low → High</option>
+            <option value="profit:desc">{t.filters.sortProfit}</option>
+            <option value="profit:asc">{t.filters.sortProfit} (Low → High)</option>
+            <option value="name:asc">{t.filters.sortName}</option>
+            <option value="name:desc">{t.filters.sortName} (Z → A)</option>
+            <option value="quantity:desc">{t.filters.sortQuantity}</option>
           </select>
           <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500 text-xs">
             ▼

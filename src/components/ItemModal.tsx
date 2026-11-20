@@ -18,12 +18,13 @@ import {
   EquipmentItemInput, 
   ITEM_CATEGORIES, 
   ITEM_CONDITIONS, 
-  ITEM_STATUSES,
+  ITEM_STATUSES, 
   STANDARD_UNITS,
   ItemCondition, 
   ItemStatus 
 } from '../types/inventory';
 import { formatBirr, formatPercentage } from '../utils/formatters';
+import { useTranslation } from '../context/LanguageContext';
 
 interface ItemModalProps {
   isOpen: boolean;
@@ -38,6 +39,14 @@ export const ItemModal: React.FC<ItemModalProps> = ({
   onClose,
   onSave,
 }) => {
+  const { 
+    t, 
+    getCategoryLabel, 
+    getConditionLabel, 
+    getStatusLabel, 
+    getUnitDisplay 
+  } = useTranslation();
+
   const isEditing = Boolean(item);
   const nameInputRef = useRef<HTMLInputElement>(null);
 
@@ -129,16 +138,16 @@ export const ItemModal: React.FC<ItemModalProps> = ({
 
   // Active unit labels
   const activeUnitLabel = useMemo(() => {
-    if (unit === 'custom') return customUnit.trim() || 'Units';
-    const found = STANDARD_UNITS.find((u) => u.value === unit);
-    return found ? (numQty === 1 ? found.singular : found.plural) : 'Units';
-  }, [unit, customUnit, numQty]);
+    if (unit === 'custom') return customUnit.trim() || t.units.pcs.plural;
+    const u = getUnitDisplay(unit);
+    return numQty === 1 ? u.singular : u.plural;
+  }, [unit, customUnit, numQty, getUnitDisplay, t.units.pcs.plural]);
 
   const activeUnitSingular = useMemo(() => {
-    if (unit === 'custom') return customUnit.trim() || 'Unit';
-    const found = STANDARD_UNITS.find((u) => u.value === unit);
-    return found ? found.singular : 'Unit';
-  }, [unit, customUnit]);
+    if (unit === 'custom') return customUnit.trim() || t.units.pcs.singular;
+    const u = getUnitDisplay(unit);
+    return u.singular;
+  }, [unit, customUnit, getUnitDisplay, t.units.pcs.singular]);
 
   // Auto-generate SKU/Serial for items without barcodes
   const handleGenerateSerial = () => {
@@ -157,7 +166,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
   // Handle smart submission
   const processSubmit = async (addAnother: boolean) => {
     if (!name.trim()) {
-      setError('Please provide an equipment name or model description');
+      setError(t.itemModal.equipmentNamePlaceholder);
       nameInputRef.current?.focus();
       return;
     }
@@ -235,21 +244,21 @@ export const ItemModal: React.FC<ItemModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-bold text-white">
-                  {isEditing ? 'Edit Equipment Details' : 'New Equipment Arrival'}
+                  {isEditing ? t.itemModal.titleEdit : t.itemModal.titleNew}
                 </h3>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                  {isEditing ? 'Update Mode' : 'Stock Intake'}
+                  {isEditing ? t.itemModal.updateMode : t.itemModal.stockIntake}
                 </span>
                 {batchCount > 0 && (
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300">
-                    {batchCount} added this session
+                    {batchCount} {t.itemModal.addedSessionCount}
                   </span>
                 )}
               </div>
               <p className="text-xs text-slate-400">
                 {isEditing
-                  ? 'Update pricing, condition, or serial numbers'
-                  : 'Register incoming stock with purchase cost and target selling price'}
+                  ? t.itemModal.titleEdit
+                  : t.itemModal.section1Subtitle}
               </p>
             </div>
           </div>
@@ -287,17 +296,17 @@ export const ItemModal: React.FC<ItemModalProps> = ({
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-                Equipment Identification
+                {t.itemModal.section1Title}
               </span>
               <span className="text-[11px] text-slate-500">
-                * Required fields
+                * {t.common.required}
               </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div className="sm:col-span-2">
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Equipment Name &amp; Description <span className="text-emerald-400">*</span>
+                  {t.itemModal.equipmentName} <span className="text-emerald-400">*</span>
                 </label>
                 <input
                   ref={nameInputRef}
@@ -305,14 +314,14 @@ export const ItemModal: React.FC<ItemModalProps> = ({
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Sony FX3 Cinema Line Camera Body or DeWalt 20V Drill"
+                  placeholder={t.itemModal.equipmentNamePlaceholder}
                   className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all font-medium"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Category <span className="text-emerald-400">*</span>
+                  {t.itemModal.category} <span className="text-emerald-400">*</span>
                 </label>
                 <select
                   value={category}
@@ -321,7 +330,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
                 >
                   {ITEM_CATEGORIES.map((cat) => (
                     <option key={cat} value={cat}>
-                      {cat}
+                      {getCategoryLabel(cat)}
                     </option>
                   ))}
                 </select>
@@ -329,27 +338,27 @@ export const ItemModal: React.FC<ItemModalProps> = ({
 
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Brand / Manufacturer
-                  <span className="text-[10px] text-slate-500 font-normal ml-1.5">(auto-detected if empty)</span>
+                  {t.itemModal.brand}
+                  <span className="text-[10px] text-slate-500 font-normal ml-1.5">({t.itemModal.brandHint})</span>
                 </label>
                 <input
                   type="text"
                   value={brand}
                   onChange={(e) => setBrand(e.target.value)}
-                  placeholder="e.g. Sony, Apple, DeWalt..."
+                  placeholder={t.itemModal.brandPlaceholder}
                   className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Model / Part Number
+                  {t.itemModal.model}
                 </label>
                 <input
                   type="text"
                   value={model}
                   onChange={(e) => setModel(e.target.value)}
-                  placeholder="e.g. ILME-FX3, DCD791..."
+                  placeholder={t.itemModal.modelPlaceholder}
                   className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </div>
@@ -357,7 +366,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="text-xs font-semibold text-slate-300">
-                    Serial Number / Barcode
+                    {t.itemModal.serialBarcode}
                   </label>
                   <button
                     type="button"
@@ -365,7 +374,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
                     className="text-[10px] text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-medium hover:underline"
                   >
                     <RefreshCw className="w-3 h-3" />
-                    Auto-generate
+                    {t.itemModal.autoGenerate}
                   </button>
                 </div>
                 <div className="relative">
@@ -387,21 +396,21 @@ export const ItemModal: React.FC<ItemModalProps> = ({
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
                 <TrendingUp className="w-4 h-4" />
-                Cost, Pricing &amp; Profit Calculator (Br)
+                {t.itemModal.section2Title} ({t.common.currencySymbol})
               </span>
               <span className="text-[10px] uppercase font-bold text-slate-500">
-                Ethiopian Birr
+                {t.common.currencyName}
               </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-200 mb-1">
-                  Purchase Price per {activeUnitSingular} (Br) <span className="text-emerald-400">*</span>
+                  {t.itemModal.purchasePricePerUnit} ({activeUnitSingular}) <span className="text-emerald-400">*</span>
                 </label>
                 <div className="relative">
                   <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs font-black">
-                    Br
+                    {t.common.currencySymbol}
                   </span>
                   <input
                     type="number"
@@ -421,11 +430,11 @@ export const ItemModal: React.FC<ItemModalProps> = ({
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="text-xs font-semibold text-slate-200">
-                    Target Selling Price per {activeUnitSingular} (Br) <span className="text-emerald-400">*</span>
+                    {t.itemModal.targetSellingPricePerUnit} ({activeUnitSingular}) <span className="text-emerald-400">*</span>
                   </label>
                   {numPurchase > 0 && (
                     <div className="flex items-center gap-1 text-[10px] text-slate-400">
-                      <span>Markup:</span>
+                      <span>{t.itemModal.markup}:</span>
                       <button
                         type="button"
                         onClick={() => applyMarkup(20)}
@@ -452,7 +461,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
                 </div>
                 <div className="relative">
                   <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-teal-400 text-xs font-black">
-                    Br
+                    {t.common.currencySymbol}
                   </span>
                   <input
                     type="number"
@@ -474,7 +483,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
             <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs">
               <div className="flex items-center gap-2">
                 <span className="text-slate-400">
-                  {numQty > 1 ? `Projected Profit (${numQty} ${activeUnitLabel}):` : `Projected Profit per ${activeUnitSingular}:`}
+                  {numQty > 1 ? `${t.itemModal.projectedProfitPrefix} (${numQty} ${activeUnitLabel}):` : `${t.itemModal.projectedProfitPer} ${activeUnitSingular}:`}
                 </span>
                 <span
                   className={`text-sm font-black ${
@@ -490,10 +499,10 @@ export const ItemModal: React.FC<ItemModalProps> = ({
               </div>
               <div className="flex items-center gap-2 text-slate-400">
                 <span className="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 font-semibold">
-                  {formatPercentage(marginPercent)} Margin
+                  {formatPercentage(marginPercent)} {t.metrics.margin}
                 </span>
                 <span className="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 font-semibold">
-                  {formatPercentage(roiPercent)} ROI
+                  {formatPercentage(roiPercent)} {t.metrics.roi}
                 </span>
               </div>
             </div>
@@ -504,10 +513,10 @@ export const ItemModal: React.FC<ItemModalProps> = ({
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
                 <Layers className="w-4 h-4" />
-                Unit &amp; Inventory Stocking
+                {t.itemModal.section3Title}
               </span>
               <span className="text-[10px] uppercase font-bold text-slate-500">
-                Measurement &amp; Storage
+                {t.itemModal.section3Subtitle}
               </span>
             </div>
 
@@ -515,7 +524,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
               {/* Unit of Measurement Selection */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Unit of Measurement <span className="text-emerald-400">*</span>
+                  {t.itemModal.unitOfMeasurement} <span className="text-emerald-400">*</span>
                 </label>
                 <select
                   value={unit}
@@ -524,11 +533,11 @@ export const ItemModal: React.FC<ItemModalProps> = ({
                 >
                   {STANDARD_UNITS.map((u) => (
                     <option key={u.value} value={u.value} className="bg-slate-900 text-slate-200">
-                      {u.label}
+                      {getUnitDisplay(u.value).label}
                     </option>
                   ))}
                   <option value="custom" className="bg-slate-900 text-slate-200">
-                    Other (Custom unit...)
+                    {t.units.customOption}
                   </option>
                 </select>
                 {unit === 'custom' && (
@@ -536,7 +545,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
                     type="text"
                     value={customUnit}
                     onChange={(e) => setCustomUnit(e.target.value)}
-                    placeholder="e.g. Bag, Bottle, Bundle..."
+                    placeholder={t.itemModal.customUnitPlaceholder}
                     className="mt-2 w-full px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 font-medium"
                   />
                 )}
@@ -545,7 +554,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
               {/* Quantity Arrived */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center justify-between">
-                  <span>Quantity Arrived <span className="text-emerald-400">*</span></span>
+                  <span>{t.itemModal.quantityArrived} <span className="text-emerald-400">*</span></span>
                   <span className="text-[10px] text-cyan-400 font-semibold uppercase">{activeUnitLabel}</span>
                 </label>
                 <div className="relative">
@@ -566,8 +575,8 @@ export const ItemModal: React.FC<ItemModalProps> = ({
               {/* Low Stock Alert */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center justify-between">
-                  <span>Low Stock Alert</span>
-                  <span className="text-[10px] text-slate-500 font-normal">Reorder level</span>
+                  <span>{t.itemModal.lowStockAlert}</span>
+                  <span className="text-[10px] text-slate-500 font-normal">{t.itemModal.reorderLevelHint}</span>
                 </label>
                 <div className="relative">
                   <input
@@ -588,7 +597,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
               {/* Condition */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Condition
+                  {t.itemModal.condition}
                 </label>
                 <select
                   value={condition}
@@ -597,7 +606,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
                 >
                   {ITEM_CONDITIONS.map((cond) => (
                     <option key={cond.value} value={cond.value}>
-                      {cond.label}
+                      {getConditionLabel(cond.value)}
                     </option>
                   ))}
                 </select>
@@ -606,7 +615,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
               {/* Stock Status */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Stock Status
+                  {t.itemModal.stockStatus}
                 </label>
                 <select
                   value={status}
@@ -615,7 +624,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
                 >
                   {ITEM_STATUSES.map((st) => (
                     <option key={st.value} value={st.value}>
-                      {st.label}
+                      {getStatusLabel(st.value)}
                     </option>
                   ))}
                 </select>
@@ -624,7 +633,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
               {/* Shop Location / Shelf */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Shop Location / Shelf
+                  {t.itemModal.shopLocation}
                 </label>
                 <div className="relative">
                   <MapPin className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -632,7 +641,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
                     type="text"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    placeholder="e.g. Cabinet 2, Shelf B"
+                    placeholder={t.itemModal.shopLocationPlaceholder}
                     className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs sm:text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
@@ -641,7 +650,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
               {/* Arrival / Intake Date */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Arrival / Intake Date
+                  {t.itemModal.arrivalDate}
                 </label>
                 <div className="relative">
                   <Calendar className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -657,7 +666,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
               {/* Warranty Period */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Warranty (Months)
+                  {t.itemModal.warrantyMonths}
                 </label>
                 <div className="relative">
                   <ShieldCheck className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -676,13 +685,13 @@ export const ItemModal: React.FC<ItemModalProps> = ({
           {/* Notes */}
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1">
-              Internal Arrival Notes / Included Accessories
+              {t.itemModal.notesLabel}
             </label>
             <textarea
               rows={2}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="e.g. Comes with charger, carrying case, verified working order upon delivery..."
+              placeholder={t.itemModal.notesPlaceholder}
               className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
           </div>
@@ -702,7 +711,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
               disabled={isSubmitting}
               className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-700 transition-colors"
             >
-              Cancel
+              {t.common.cancel}
             </button>
 
             <div className="flex items-center gap-2.5">
@@ -715,7 +724,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
                   title="Register this item and keep modal open for the next arrival"
                 >
                   <Plus className="w-4 h-4" />
-                  <span>Save &amp; Add Another</span>
+                  <span>{t.itemModal.registerAndAddAnother}</span>
                 </button>
               )}
 
@@ -725,10 +734,10 @@ export const ItemModal: React.FC<ItemModalProps> = ({
                 className="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-950 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 shadow-lg shadow-emerald-500/25 active:scale-[0.98] transition-all cursor-pointer disabled:opacity-50"
               >
                 {isSubmitting
-                  ? 'Saving...'
+                  ? t.common.loading
                   : isEditing
-                  ? 'Update Equipment'
-                  : 'Save to Inventory'}
+                  ? t.itemModal.updateEquipment
+                  : t.itemModal.registerEquipment}
               </button>
             </div>
           </div>

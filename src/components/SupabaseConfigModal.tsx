@@ -21,6 +21,7 @@ import {
   isSupabaseConfigured 
 } from '../lib/supabase';
 import { createClient } from '@supabase/supabase-js';
+import { useTranslation } from '../context/LanguageContext';
 
 interface SupabaseConfigModalProps {
   isOpen: boolean;
@@ -33,6 +34,7 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
   onClose,
   onConfigSaved,
 }) => {
+  const { t } = useTranslation();
   const [url, setUrl] = useState('');
   const [anonKey, setAnonKey] = useState('');
   const [isTesting, setIsTesting] = useState(false);
@@ -155,8 +157,8 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
               <Database className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">Supabase Cloud Database</h3>
-              <p className="text-xs text-slate-400">Configure PostgreSQL real-time synchronization</p>
+              <h3 className="text-base font-bold text-white">{t.dbModal.title}</h3>
+              <p className="text-xs text-slate-400">{t.dbModal.subtitle}</p>
             </div>
           </div>
           <button
@@ -184,7 +186,7 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
             )}
             <div className="text-xs space-y-1">
               <p className="font-semibold text-sm">
-                {currentlyConfigured ? 'Supabase Credentials Configured' : 'Running in Local Demo Mode'}
+                {currentlyConfigured ? t.dbModal.cloudConnected : t.dbModal.localDemoMode}
               </p>
               <p className="text-slate-300">
                 {currentlyConfigured
@@ -233,7 +235,7 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
           <div className="space-y-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Project URL (VITE_SUPABASE_URL)
+                {t.dbModal.projectUrl}
               </label>
               <div className="relative">
                 <Globe className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -249,7 +251,7 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
 
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Anon Public Key (VITE_SUPABASE_ANON_KEY)
+                {t.dbModal.anonKey}
               </label>
               <div className="relative">
                 <Key className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -292,7 +294,7 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-rose-400 hover:bg-rose-950/30 border border-rose-900/40 transition-colors"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
-                  <span>Clear &amp; Use Demo Mode</span>
+                  <span>{t.dbModal.switchToLocal}</span>
                 </button>
               )}
             </div>
@@ -305,7 +307,7 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
                 className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-200 bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors disabled:opacity-50"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isTesting ? 'animate-spin text-emerald-400' : ''}`} />
-                <span>{isTesting ? 'Testing...' : 'Test Connection'}</span>
+                <span>{isTesting ? t.common.loading : 'Test Connection'}</span>
               </button>
 
               <button
@@ -313,7 +315,7 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
                 onClick={handleSave}
                 className="px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-950 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 shadow-md shadow-emerald-500/20 active:scale-[0.98] transition-all cursor-pointer"
               >
-                Save &amp; Connect
+                {t.dbModal.connectCloud}
               </button>
             </div>
           </div>

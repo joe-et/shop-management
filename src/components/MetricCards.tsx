@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { FinancialMetrics, TimeframePeriod } from '../types/inventory';
 import { formatBirr, formatProfit } from '../utils/formatters';
+import { useTranslation } from '../context/LanguageContext';
 
 interface MetricCardsProps {
   metrics: FinancialMetrics;
@@ -23,13 +24,6 @@ interface MetricCardsProps {
   activeStockFilter?: string;
 }
 
-const TIMEFRAME_LABELS: Record<TimeframePeriod, string> = {
-  today: 'Today',
-  this_week: 'This Week',
-  this_month: 'This Month',
-  all_time: 'All Time',
-};
-
 export const MetricCards: React.FC<MetricCardsProps> = ({ 
   metrics,
   timeframe,
@@ -37,6 +31,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
   onSelectStockFilter,
   activeStockFilter
 }) => {
+  const { t, getTimeframeLabel } = useTranslation();
   const isPeriodActive = timeframe !== 'all_time';
   const displayGrossProfit = isPeriodActive ? metrics.periodNetProfit : metrics.netProfit;
   const displayExpenses = isPeriodActive ? metrics.periodExpenses : metrics.totalExpenses;
@@ -60,10 +55,10 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 px-1">
         <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
           <Calendar className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Real-Time Performance Overview</span>
+          <span>{t.metrics.financialOverview}</span>
           {isPeriodActive && (
             <span className="text-[10px] lowercase font-normal px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
-              filtered: {TIMEFRAME_LABELS[timeframe]}
+              {getTimeframeLabel(timeframe)}
             </span>
           )}
         </div>
@@ -80,7 +75,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
               }`}
             >
-              {TIMEFRAME_LABELS[period]}
+              {getTimeframeLabel(period)}
             </button>
           ))}
         </div>
@@ -100,7 +95,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-              {displayExpenses > 0 ? 'True Bottom-Line Net Profit' : 'Net Realized Profit / Loss'}
+              {displayExpenses > 0 ? t.metrics.trueNetProfit : (isLoss ? t.metrics.netLoss : t.metrics.trueNetProfit)}
             </span>
             <div
               className={`w-9 h-9 rounded-xl flex items-center justify-center ${
@@ -136,20 +131,20 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
 
             {displayExpenses > 0 ? (
               <div className="flex items-center gap-1.5 text-[11px] text-slate-400 mt-1 flex-wrap">
-                <span className="text-emerald-400/90 font-medium">Gross: +{formatBirr(displayGrossProfit)}</span>
+                <span className="text-emerald-400/90 font-medium">{t.metrics.grossProfit}: +{formatBirr(displayGrossProfit)}</span>
                 <span className="text-slate-600">•</span>
-                <span className="text-rose-400 font-medium">Overhead: -{formatBirr(displayExpenses)}</span>
+                <span className="text-rose-400 font-medium">{t.metrics.overhead}: -{formatBirr(displayExpenses)}</span>
               </div>
             ) : (
               <p className="text-xs text-slate-400 mt-1">
-                Realized on <span className="font-semibold text-slate-300">{displaySoldCount}</span> sold unit{displaySoldCount !== 1 ? 's' : ''} {isPeriodActive ? `(${TIMEFRAME_LABELS[timeframe].toLowerCase()})` : ''}
+                {displaySoldCount} {t.metrics.realizedRevenue} {isPeriodActive ? `(${getTimeframeLabel(timeframe).toLowerCase()})` : ''}
               </p>
             )}
           </div>
 
           <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
             <div className="flex items-center gap-1.5">
-              <span className="text-slate-400">Margin:</span>
+              <span className="text-slate-400">{t.metrics.margin}:</span>
               <span
                 className={`font-semibold flex items-center ${
                   displayMargin >= 0 ? 'text-emerald-400' : 'text-rose-400'
@@ -160,7 +155,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
               </span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="text-slate-400">ROI:</span>
+              <span className="text-slate-400">{t.metrics.roi}:</span>
               <span
                 className={`font-semibold ${
                   displayRoi >= 0 ? 'text-emerald-400' : 'text-rose-400'
@@ -176,7 +171,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
         <div className="relative overflow-hidden rounded-2xl p-5 bg-gradient-to-br from-blue-950/30 via-slate-900 to-slate-900 border border-blue-500/20 shadow-lg shadow-blue-950/20">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-              Total Revenue ({TIMEFRAME_LABELS[timeframe]})
+              {t.metrics.revenueCostBreakdown} ({getTimeframeLabel(timeframe)})
             </span>
             <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center">
               <DollarSign className="w-5 h-5" />
@@ -188,12 +183,12 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
               {formatBirr(displayRevenue)}
             </div>
             <p className="text-xs text-slate-400 mt-1">
-              Gross inflow from finalized sales
+              {t.metrics.realizedRevenue}
             </p>
           </div>
 
           <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
-            <span>Cost of Goods:</span>
+            <span>{t.metrics.costOfSold}:</span>
             <span className="font-semibold text-slate-300">
               {formatBirr(displayCostOfSold)}
             </span>
@@ -204,7 +199,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
         <div className="relative overflow-hidden rounded-2xl p-5 bg-gradient-to-br from-indigo-950/30 via-slate-900 to-slate-900 border border-indigo-500/20 shadow-lg shadow-indigo-950/20">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-              Active Stock Value
+              {t.metrics.activeInventoryCost}
             </span>
             <div className="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center">
               <Package className="w-5 h-5" />
@@ -216,12 +211,12 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
               {formatBirr(metrics.activeInventoryCost)}
             </div>
             <p className="text-xs text-slate-400 mt-1">
-              Capital tied up in live unsold stock
+              {t.metrics.unrealizedPotential}
             </p>
           </div>
 
           <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
-            <span className="text-slate-400">Potential Retail:</span>
+            <span className="text-slate-400">{t.metrics.activeRetailValue}:</span>
             <div className="flex items-center gap-1.5 font-semibold text-slate-200">
               <span>{formatBirr(metrics.activeInventoryRetailValue)}</span>
               <span className="text-[10px] text-teal-400 bg-teal-500/10 px-1.5 py-0.5 rounded border border-teal-500/20">
@@ -235,7 +230,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
         <div className="relative overflow-hidden rounded-2xl p-5 bg-gradient-to-br from-violet-950/30 via-slate-900 to-slate-900 border border-violet-500/20 shadow-lg shadow-violet-950/20">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-              Equipment Count Balance
+              {t.metrics.equipmentCountBalance}
             </span>
             <div className="w-9 h-9 rounded-xl bg-violet-500/10 text-violet-400 border border-violet-500/20 flex items-center justify-center">
               <Layers className="w-5 h-5" />
@@ -245,10 +240,10 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
           <div className="mt-3">
             <div className="text-2xl lg:text-3xl font-black tracking-tight text-white flex items-baseline gap-2">
               <span>{metrics.totalStockUnits}</span>
-              <span className="text-sm font-normal text-slate-400">units in shop</span>
+              <span className="text-sm font-normal text-slate-400">{t.metrics.totalUnitsInShop}</span>
             </div>
             <p className="text-xs text-slate-400 mt-1">
-              Across <span className="font-semibold text-slate-300">{metrics.inStockCount}</span> active items ({metrics.soldCount} total sold)
+              {metrics.inStockCount} {t.metrics.inStockOk} ({metrics.soldCount} {t.statuses.sold.toLowerCase()})
             </p>
           </div>
 
@@ -268,7 +263,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
               title="Click to view items running low (≤ 2 units)"
             >
               <AlertTriangle className="w-3 h-3 flex-shrink-0" />
-              <span>{metrics.lowStockCount} Low</span>
+              <span>{metrics.lowStockCount} {t.metrics.lowStockAlert}</span>
             </button>
 
             {/* Out of Stock Badge */}
@@ -285,7 +280,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
               title="Click to view out of stock items"
             >
               <AlertCircle className="w-3 h-3 flex-shrink-0" />
-              <span>{metrics.outOfStockCount} Out</span>
+              <span>{metrics.outOfStockCount} {t.metrics.outOfStockAlert}</span>
             </button>
 
             {/* In Stock Count */}
@@ -300,7 +295,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
               title="Click to view all in-stock items"
             >
               <CheckCircle2 className="w-3 h-3 flex-shrink-0" />
-              <span>{metrics.inStockCount} OK</span>
+              <span>{metrics.inStockCount} {t.metrics.inStockOk}</span>
             </button>
           </div>
         </div>

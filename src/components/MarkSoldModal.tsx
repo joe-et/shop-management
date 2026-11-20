@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { EquipmentItem } from '../types/inventory';
 import { formatBirr, formatPercentage } from '../utils/formatters';
+import { useTranslation } from '../context/LanguageContext';
 
 interface MarkSoldModalProps {
   isOpen: boolean;
@@ -40,6 +41,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
   onClose,
   onConfirm,
 }) => {
+  const { t, getCategoryLabel, getUnitDisplay, formatQtyWithUnit } = useTranslation();
   const [soldPrice, setSoldPrice] = useState<number>(0);
   const [quantityToSell, setQuantityToSell] = useState<number>(1);
   const [soldDate, setSoldDate] = useState<string>('');
@@ -128,6 +130,9 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
     }
   };
 
+  const unitDisp = getUnitDisplay(item.unit);
+  const unitLabel = numQtyToSell === 1 ? unitDisp.singular : unitDisp.plural;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div 
@@ -141,8 +146,8 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
               <Receipt className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">Record Equipment Sale</h3>
-              <p className="text-xs text-slate-400">Finalize units sold, actual price &amp; realized profit</p>
+              <h3 className="text-base font-bold text-white">{t.soldModal.title}</h3>
+              <p className="text-xs text-slate-400">{t.soldModal.subtitle}</p>
             </div>
           </div>
           <button
@@ -161,7 +166,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
               <div>
                 <h4 className="font-semibold text-white text-sm">{item.name}</h4>
                 <div className="flex items-center gap-2 text-xs text-slate-400 mt-0.5">
-                  <span className="text-slate-300 font-medium">{item.category}</span>
+                  <span className="text-slate-300 font-medium">{getCategoryLabel(item.category)}</span>
                   <span>•</span>
                   <span>{item.brand}</span>
                   {item.model && <span>• {item.model}</span>}
@@ -170,18 +175,18 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
               </div>
               <div className="flex flex-col items-end">
                 <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-800 text-emerald-300 border border-emerald-500/30">
-                  {availableQty} {item.unit || 'units'} Available
+                  {formatQtyWithUnit(availableQty, item.unit)} {t.soldModal.availableBadge}
                 </span>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3 pt-2 mt-1 border-t border-slate-800/80 text-xs">
               <div>
-                <span className="text-slate-500 block">Unit Cost (Purchase)</span>
+                <span className="text-slate-500 block">{t.soldModal.unitCost}</span>
                 <span className="font-semibold text-slate-200">{formatBirr(purchasePrice)}</span>
               </div>
               <div>
-                <span className="text-slate-500 block">Target Listed Price</span>
+                <span className="text-slate-500 block">{t.soldModal.targetListedPrice}</span>
                 <span className="font-semibold text-teal-400">{formatBirr(retailPrice)}</span>
               </div>
             </div>
@@ -192,10 +197,10 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
                 <Boxes className="w-4 h-4 text-emerald-400" />
-                Quantity to Sell ({item.unit || 'units'}) <span className="text-emerald-400">*</span>
+                {t.soldModal.quantityToSell} ({unitDisp.label}) <span className="text-emerald-400">*</span>
               </label>
               <span className="text-xs text-slate-400">
-                Max: <strong className="text-white">{availableQty}</strong> unit{availableQty > 1 ? 's' : ''}
+                {t.soldModal.maxUnits}: <strong className="text-white">{availableQty}</strong> {unitLabel}
               </span>
             </div>
 
@@ -247,7 +252,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
                       : 'bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-800'
                   }`}
                 >
-                  1 unit
+                  {t.soldModal.presetOne}
                 </button>
 
                 {availableQty >= 2 && (
@@ -260,7 +265,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
                         : 'bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-800'
                     }`}
                   >
-                    All ({availableQty})
+                    {t.soldModal.presetAll} ({availableQty})
                   </button>
                 )}
               </div>
@@ -271,12 +276,11 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
               <Info className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
               {isPartialSale ? (
                 <span className="text-teal-300">
-                  Selling <strong>{numQtyToSell}</strong> {item.unit || 'unit(s)'}. Remaining stock will be{' '}
-                  <strong className="text-white">{remainingStock}</strong> {item.unit || 'unit(s)'} In Stock.
+                  {t.soldModal.partialSaleExplanation} ({numQtyToSell} {unitLabel} / {remainingStock} {t.statuses.in_stock})
                 </span>
               ) : (
                 <span className="text-slate-400">
-                  Full sale of all <strong>{availableQty}</strong> {item.unit || 'unit(s)'}. This item will move completely to Sold.
+                  {t.soldModal.fullSaleExplanation} ({availableQty} {unitLabel})
                 </span>
               )}
             </div>
@@ -286,17 +290,17 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-xs font-semibold text-slate-300">
-                Agreed Sold Price per Unit (Br) <span className="text-emerald-400">*</span>
+                {t.soldModal.sellingPricePerUnit} ({t.common.currencySymbol}) <span className="text-emerald-400">*</span>
               </label>
               {numQtyToSell > 1 && (
                 <span className="text-xs text-teal-400 font-medium">
-                  Total Revenue: {formatBirr(totalSaleRevenue)}
+                  {t.table.totalRevenue}: {formatBirr(totalSaleRevenue)}
                 </span>
               )}
             </div>
             <div className="relative">
               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">
-                Br
+                {t.common.currencySymbol}
               </div>
               <input
                 type="number"
@@ -305,7 +309,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
                 required
                 value={soldPrice || ''}
                 onChange={(e) => setSoldPrice(parseFloat(e.target.value) || 0)}
-                placeholder="Enter sold price per unit..."
+                placeholder={t.soldModal.sellingPricePerUnit}
                 className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-lg font-bold text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
@@ -317,7 +321,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
                 onClick={() => setSoldPrice(retailPrice)}
                 className="text-[11px] px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
               >
-                Match Listed ({formatBirr(retailPrice, { compact: true })})
+                {t.soldModal.listedPriceRef} ({formatBirr(retailPrice, { compact: true })})
               </button>
               {retailPrice > 0 && (
                 <button
@@ -343,7 +347,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
               <div className="text-xs text-amber-400 flex items-center gap-1.5 pt-1">
                 <Tag className="w-3.5 h-3.5" />
                 <span>
-                  Discount: {formatBirr(discountAmount)} off per unit ({((discountAmount / retailPrice) * 100).toFixed(1)}%)
+                  {t.soldModal.discountNotice}: {formatBirr(discountAmount)} ({((discountAmount / retailPrice) * 100).toFixed(1)}%)
                 </span>
               </div>
             )}
@@ -361,9 +365,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
           >
             <div className="flex items-center justify-between">
               <span className="text-xs uppercase font-semibold tracking-wider text-slate-400">
-                {numQtyToSell > 1 
-                  ? `Realized Net Profit for ${numQtyToSell} Units Sold` 
-                  : 'Realized Net Profit (1 Unit Sold)'}
+                {t.metrics.trueNetProfit} ({numQtyToSell} {unitLabel})
               </span>
               <div className="flex items-center gap-1 text-xs font-bold">
                 {isProfitable ? (
@@ -371,7 +373,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
                 ) : isLoss ? (
                   <TrendingDown className="w-4 h-4 text-rose-400" />
                 ) : null}
-                <span>{isProfitable ? 'Profitable' : isLoss ? 'Loss' : 'Break-Even'}</span>
+                <span>{isProfitable ? t.metrics.trueNetProfit : isLoss ? t.metrics.netLoss : 'Break-Even'}</span>
               </div>
             </div>
 
@@ -384,7 +386,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
                 {totalSaleProfit >= 0 ? `+${formatBirr(totalSaleProfit)}` : formatBirr(totalSaleProfit)}
               </span>
               <div className="text-right">
-                <span className="text-xs block text-slate-400">Margin / ROI</span>
+                <span className="text-xs block text-slate-400">{t.metrics.margin} / {t.metrics.roi}</span>
                 <span className="text-sm font-bold">
                   {formatPercentage(marginPercent)} / {formatPercentage(roiPercent)}
                 </span>
@@ -394,17 +396,17 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
             {/* Financial breakdown sub-bar */}
             <div className="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
               <span>
-                Revenue: <strong className="text-slate-200">{formatBirr(totalSaleRevenue)}</strong>
+                {t.metrics.revenueCostBreakdown.split(' ')[0]}: <strong className="text-slate-200">{formatBirr(totalSaleRevenue)}</strong>
               </span>
               <span>
-                Cost of Sold: <strong className="text-slate-200">{formatBirr(totalSaleCost)}</strong>
+                {t.metrics.costOfSold}: <strong className="text-slate-200">{formatBirr(totalSaleCost)}</strong>
               </span>
             </div>
 
             {isLoss && (
               <div className="mt-2 text-xs flex items-center gap-1.5 text-rose-400">
                 <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" />
-                <span>Unit sold price is below purchase cost ({formatBirr(purchasePrice)}).</span>
+                <span>{t.soldModal.lossWarning} ({formatBirr(purchasePrice)}).</span>
               </div>
             )}
           </div>
@@ -413,7 +415,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                Sale Date
+                {t.soldModal.saleDate}
               </label>
               <div className="relative">
                 <Calendar className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -429,7 +431,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
 
             <div>
               <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                Customer Name (Optional)
+                {t.soldModal.customerName} {t.soldModal.customerOptional}
               </label>
               <div className="relative">
                 <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -437,7 +439,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
                   type="text"
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
-                  placeholder="e.g. Dawit Tadesse"
+                  placeholder={t.soldModal.customerNamePlaceholder}
                   className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
                 />
               </div>
@@ -447,7 +449,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                Customer Phone (Optional)
+                {t.soldModal.customerPhone} {t.soldModal.customerOptional}
               </label>
               <div className="relative">
                 <Phone className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -455,7 +457,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
                   type="text"
                   value={customerPhone}
                   onChange={(e) => setCustomerPhone(e.target.value)}
-                  placeholder="+251 91 123 4567"
+                  placeholder={t.soldModal.customerPhonePlaceholder}
                   className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
                 />
               </div>
@@ -463,13 +465,13 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
 
             <div>
               <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                Sale Note (Optional)
+                {t.common.notes} {t.soldModal.customerOptional}
               </label>
               <input
                 type="text"
                 value={saleNotes}
                 onChange={(e) => setSaleNotes(e.target.value)}
-                placeholder="Payment method, CBE transaction ID..."
+                placeholder="Payment method, CBE / Telebirr ID..."
                 className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
               />
             </div>
@@ -489,7 +491,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
               disabled={isSubmitting}
               className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
             >
-              Cancel
+              {t.common.cancel}
             </button>
             <button
               type="submit"
@@ -497,8 +499,8 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
               className="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-950 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 shadow-lg shadow-emerald-500/25 active:scale-[0.98] transition-all disabled:opacity-50 cursor-pointer"
             >
               {isSubmitting
-                ? 'Recording Sale...'
-                : `Confirm Sale of ${numQtyToSell} Unit${numQtyToSell > 1 ? 's' : ''} & Record Profit`}
+                ? t.common.loading
+                : `${t.soldModal.confirmSaleButton} (${numQtyToSell} ${unitLabel})`}
             </button>
           </div>
         </form>

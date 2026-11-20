@@ -44,8 +44,10 @@ import {
   Boxes,
   PackagePlus
 } from 'lucide-react';
+import { useTranslation } from './context/LanguageContext';
 
 export default function App() {
+  const { t, getCategoryLabel } = useTranslation();
   const [items, setItems] = useState<EquipmentItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isConfigured, setIsConfigured] = useState<boolean>(isSupabaseConfigured());
@@ -146,8 +148,8 @@ export default function App() {
     loadInventory();
     showToast(
       isSupabaseConfigured()
-        ? 'Connected to Supabase live database!'
-        : 'Switched to local demo storage'
+        ? t.toasts.connectedSupabase
+        : t.toasts.switchedDemo
     );
   };
 
@@ -157,7 +159,7 @@ export default function App() {
       setIsResetting(true);
       const demoData = await resetToDemoData();
       setItems(demoData);
-      showToast('Loaded initial equipment catalog');
+      showToast(t.toasts.loadedCatalog);
     } catch (err) {
       console.error('Failed to reset demo data:', err);
     } finally {
@@ -169,10 +171,10 @@ export default function App() {
   const handleSaveItem = async (input: EquipmentItemInput, itemId?: string) => {
     if (itemId) {
       await updateItem(itemId, input);
-      showToast(`Updated "${input.name}"`);
+      showToast(`${t.toasts.updatedEquipment} "${input.name}"`);
     } else {
       await createItem(input);
-      showToast(`Added incoming equipment: "${input.name}"`);
+      showToast(`${t.toasts.addedEquipment}: "${input.name}"`);
     }
     await loadInventory();
   };
@@ -192,7 +194,7 @@ export default function App() {
     const qtySold = saleDetails.quantity_sold ?? 1;
     await markAsSold(id, saleDetails);
     showToast(
-      `Recorded sale: ${qtySold} unit(s) at ${formatBirr(saleDetails.sold_price * qtySold)}!`
+      `${t.toasts.recordedSale}: ${qtySold} at ${formatBirr(saleDetails.sold_price * qtySold)}!`
     );
     await loadInventory();
   };
@@ -207,7 +209,7 @@ export default function App() {
       customer_phone: null,
       location: 'Main Shop Floor',
     });
-    showToast(`Reverted "${item.name}" back to stock`);
+    showToast(`${t.toasts.revertedStock}: "${item.name}"`);
     await loadInventory();
   };
 
@@ -217,7 +219,7 @@ export default function App() {
     try {
       setIsDeleting(true);
       await deleteItem(deletingItem.id);
-      showToast(`Deleted "${deletingItem.name}"`);
+      showToast(`${t.toasts.deletedEquipment}: "${deletingItem.name}"`);
       setDeletingItem(null);
       await loadInventory();
     } catch (err) {
@@ -230,13 +232,13 @@ export default function App() {
   // Operating Expenses Handlers
   const handleAddExpense = async (input: ShopExpenseInput) => {
     await createExpense(input);
-    showToast(`Recorded expense: "${input.title}" (-${formatBirr(input.amount)})`);
+    showToast(`${t.toasts.recordedExpense}: "${input.title}" (-${formatBirr(input.amount)})`);
     await loadExpenses();
   };
 
   const handleDeleteExpense = async (id: string) => {
     await deleteExpense(id);
-    showToast('Deleted expense record');
+    showToast(t.toasts.deletedExpense);
     await loadExpenses();
   };
 
@@ -341,8 +343,8 @@ export default function App() {
           {loading ? (
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-16 text-center shadow-md">
               <Loader2 className="w-8 h-8 text-emerald-400 animate-spin mx-auto mb-3" />
-              <p className="text-sm font-medium text-slate-300">Loading equipment inventory...</p>
-              <p className="text-xs text-slate-500 mt-1">Connecting to database</p>
+              <p className="text-sm font-medium text-slate-300">{t.common.loading}</p>
+              <p className="text-xs text-slate-500 mt-1">{t.dbModal.subtitle}</p>
             </div>
           ) : (
             <InventoryTable
@@ -372,11 +374,11 @@ export default function App() {
               <div className="flex items-center gap-2">
                 <Boxes className="w-4 h-4 text-emerald-400" />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
-                  Inventory Distribution by Category
+                  {t.table.distributionByCategory}
                 </h3>
               </div>
               <span className="text-xs text-slate-400">
-                {categorySummaries.length} categories represented
+                {categorySummaries.length} {t.table.categoriesRepresented}
               </span>
             </div>
 
@@ -390,13 +392,13 @@ export default function App() {
                       category: prev.category === cat.category ? 'all' : cat.category,
                     }))
                   }
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs border transition-all ${
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs border transition-all cursor-pointer ${
                     filters.category === cat.category
                       ? 'bg-emerald-950/80 border-emerald-500 text-emerald-300 font-semibold'
                       : 'bg-slate-950/80 border-slate-800 text-slate-300 hover:border-slate-700'
                   }`}
                 >
-                  <span>{cat.category}</span>
+                  <span>{getCategoryLabel(cat.category)}</span>
                   <span className="px-1.5 py-0.2 rounded bg-slate-800 text-[10px] text-slate-400">
                     {cat.count}
                   </span>
@@ -420,13 +422,13 @@ export default function App() {
         className="fixed bottom-6 left-6 z-40 flex items-center gap-2 px-4 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-slate-950 font-black text-sm shadow-2xl shadow-emerald-500/30 hover:scale-105 active:scale-95 transition-all cursor-pointer ring-2 ring-white/20"
       >
         <PackagePlus className="w-5 h-5 stroke-[2.5]" />
-        <span className="font-bold">New Arrival</span>
+        <span className="font-bold">{t.common.newArrival}</span>
       </button>
 
       {/* Footer */}
       <footer className="border-t border-slate-900 py-6 text-center text-xs text-slate-500">
         <p>
-          ShopFlow Equipment &amp; Financial Management System • All prices in Ethiopian Birr (Br)
+          {t.footer.systemInfo}
         </p>
       </footer>
 
@@ -489,13 +491,13 @@ export default function App() {
                 <AlertTriangle className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-white">Delete Equipment</h3>
-                <p className="text-xs text-slate-400">This action cannot be undone</p>
+                <h3 className="text-base font-bold text-white">{t.toasts.deleteItemTitle}</h3>
+                <p className="text-xs text-slate-400">{t.toasts.deleteItemWarning}</p>
               </div>
             </div>
 
             <p className="text-sm text-slate-300">
-              Are you sure you want to delete <span className="font-semibold text-white">"{deletingItem.name}"</span>?
+              {t.toasts.deleteItemWarning}: <span className="font-semibold text-white">"{deletingItem.name}"</span>?
             </p>
 
             <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
@@ -503,17 +505,17 @@ export default function App() {
                 type="button"
                 onClick={() => setDeletingItem(null)}
                 disabled={isDeleting}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors cursor-pointer"
               >
-                Cancel
+                {t.common.cancel}
               </button>
               <button
                 type="button"
                 onClick={handleConfirmDelete}
                 disabled={isDeleting}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 transition-colors disabled:opacity-50"
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 transition-colors disabled:opacity-50 cursor-pointer"
               >
-                {isDeleting ? 'Deleting...' : 'Delete Item'}
+                {isDeleting ? t.toasts.deleting : t.toasts.deleteItemConfirm}
               </button>
             </div>
           </div>

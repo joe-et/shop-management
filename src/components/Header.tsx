@@ -16,6 +16,8 @@ import {
 import { EquipmentItem, SyncStatusInfo } from '../types/inventory';
 import { exportInventoryToCsv } from '../utils/csvExport';
 import { getSyncStatus, subscribeToSyncStatus, flushSyncQueue } from '../services/inventoryService';
+import { useTranslation } from '../context/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 interface HeaderProps {
   items: EquipmentItem[];
@@ -37,6 +39,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenExpenses,
   isResetting = false,
 }) => {
+  const { t } = useTranslation();
   const [syncStatus, setSyncStatus] = useState<SyncStatusInfo>(getSyncStatus());
   const [isManualSyncing, setIsManualSyncing] = useState(false);
 
@@ -76,20 +79,23 @@ export const Header: React.FC<HeaderProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl font-bold tracking-tight text-white">
-                ShopFlow <span className="text-emerald-400 font-semibold">Pro</span>
+                {t.common.appTitle} <span className="text-emerald-400 font-semibold">Pro</span>
               </h1>
               <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                Birr (Br)
+                {t.common.currencySymbol}
               </span>
             </div>
             <p className="text-xs text-slate-400">
-              Equipment Inventory &amp; Profit/Loss Financial Management
+              {t.common.appSubtitle}
             </p>
           </div>
         </div>
 
         {/* Actions & Connection Status */}
         <div className="flex items-center flex-wrap gap-2.5">
+          {/* Language Selector */}
+          <LanguageSwitcher />
+
           {/* New Equipment Arrival Primary Button */}
           <button
             onClick={onOpenAddItem}
@@ -97,7 +103,7 @@ export const Header: React.FC<HeaderProps> = ({
             title="Register new incoming equipment (Alt+N)"
           >
             <PackagePlus className="w-4 h-4 stroke-[2.5]" />
-            <span>+ New Arrival</span>
+            <span>+ {t.common.newArrival}</span>
           </button>
 
           {/* Audit Trail & Stocktake Button */}
@@ -107,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-amber-300 bg-amber-950/60 hover:bg-amber-900/60 border border-amber-600/50 hover:border-amber-500 shadow-sm transition-all cursor-pointer"
           >
             <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-            <span>Audit &amp; Stocktake</span>
+            <span>{t.common.auditStocktake}</span>
           </button>
 
           {/* Shop Operating Expenses Button */}
@@ -117,7 +123,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-rose-300 bg-rose-950/60 hover:bg-rose-900/60 border border-rose-600/50 hover:border-rose-500 shadow-sm transition-all cursor-pointer"
           >
             <Receipt className="w-3.5 h-3.5 text-rose-400" />
-            <span>Expenses</span>
+            <span>{t.common.expenses}</span>
           </button>
 
           {/* Supabase & Offline-First Sync Status Pill */}
@@ -180,14 +186,14 @@ export const Header: React.FC<HeaderProps> = ({
 
               <span>
                 {!syncStatus.isConfigured
-                  ? 'Demo Storage'
+                  ? t.sync.demoStorage
                   : !syncStatus.isOnline
-                  ? 'Offline Mode'
+                  ? t.sync.offlineMode
                   : syncStatus.state === 'syncing' || isManualSyncing
-                  ? 'Syncing...'
+                  ? t.sync.syncing
                   : syncStatus.pendingCount > 0
-                  ? `${syncStatus.pendingCount} Pending Sync`
-                  : 'Cloud Synced'}
+                  ? `${syncStatus.pendingCount} ${t.sync.pendingCount}`
+                  : t.sync.synced}
               </span>
 
               {syncStatus.isConfigured && syncStatus.pendingCount === 0 && syncStatus.isOnline && (
@@ -204,7 +210,7 @@ export const Header: React.FC<HeaderProps> = ({
                 className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition-colors shadow-sm"
               >
                 <CloudUpload className="w-3.5 h-3.5" />
-                <span>Sync</span>
+                <span>{t.sync.syncNow}</span>
               </button>
             )}
           </div>
@@ -217,7 +223,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 hover:text-white transition-colors disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isResetting ? 'animate-spin text-emerald-400' : ''}`} />
-            <span className="hidden sm:inline">Reset Demo</span>
+            <span className="hidden sm:inline">{t.common.resetDemo}</span>
           </button>
 
           {/* Export CSV Button */}
@@ -227,7 +233,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-200 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 transition-colors shadow-sm"
           >
             <Download className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="hidden sm:inline">Export CSV</span>
+            <span className="hidden sm:inline">{t.common.exportCsv}</span>
             <span className="ml-1 text-[10px] px-1.5 py-0.2 rounded bg-slate-700 text-slate-300">
               {items.length}
             </span>
@@ -240,7 +246,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-200 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 transition-colors shadow-sm"
           >
             <Settings className="w-3.5 h-3.5 text-slate-400" />
-            <span className="hidden sm:inline">Settings</span>
+            <span className="hidden sm:inline">{t.common.database}</span>
           </button>
         </div>
       </div>

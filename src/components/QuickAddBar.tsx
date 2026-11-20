@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { EquipmentItemInput, ITEM_CATEGORIES, STANDARD_UNITS } from '../types/inventory';
 import { formatBirr, formatPercentage } from '../utils/formatters';
+import { useTranslation } from '../context/LanguageContext';
 
 interface QuickAddBarProps {
   onSave: (input: EquipmentItemInput) => Promise<void>;
@@ -17,6 +18,7 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
   onSave,
   onOpenFullModal,
 }) => {
+  const { t, getCategoryLabel, getUnitDisplay } = useTranslation();
   const [name, setName] = useState('');
   const [category, setCategory] = useState<string>(ITEM_CATEGORIES[0]);
   const [unit, setUnit] = useState<string>('pcs');
@@ -84,9 +86,9 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
           </div>
           <div>
             <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <span>Quick Equipment Intake</span>
+              <span>{t.quickAdd.title}</span>
               <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 lowercase">
-                rapid arrival entry
+                {t.quickAdd.rapidIntake}
               </span>
             </h3>
           </div>
@@ -95,11 +97,11 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
         <button
           type="button"
           onClick={onOpenFullModal}
-          className="text-xs text-slate-300 hover:text-white flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors font-medium border border-slate-700"
-          title="Open comprehensive equipment intake modal"
+          className="text-xs text-slate-300 hover:text-white flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors font-medium border border-slate-700 cursor-pointer"
+          title={t.quickAdd.detailedForm}
         >
           <SlidersHorizontal className="w-3.5 h-3.5 text-teal-400" />
-          <span>Detailed Form</span>
+          <span>{t.quickAdd.detailedForm}</span>
         </button>
       </div>
 
@@ -113,7 +115,7 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Equipment name / model description..."
+              placeholder={t.quickAdd.namePlaceholder}
               className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium"
             />
           </div>
@@ -127,7 +129,7 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
             >
               {ITEM_CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
-                  {cat}
+                  {getCategoryLabel(cat)}
                 </option>
               ))}
             </select>
@@ -141,8 +143,8 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
               required
               value={quantity}
               onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-              placeholder="Qty"
-              title="Quantity Arrived"
+              placeholder={t.common.quantity}
+              title={t.quickAdd.qtyTitle}
               className="w-full px-2 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm text-center font-bold text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
           </div>
@@ -152,12 +154,12 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
             <select
               value={unit}
               onChange={(e) => setUnit(e.target.value)}
-              title="Unit of Measurement"
+              title={t.quickAdd.unitTitle}
               className="w-full px-1.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-cyan-400 font-semibold focus:outline-none focus:ring-2 focus:ring-cyan-500 cursor-pointer"
             >
               {STANDARD_UNITS.map((u) => (
                 <option key={u.value} value={u.value}>
-                  {u.value}
+                  {getUnitDisplay(u.value).label}
                 </option>
               ))}
             </select>
@@ -165,9 +167,6 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
 
           {/* Purchase Price (Span 2) */}
           <div className="sm:col-span-2 relative">
-            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-bold">
-              Cost:
-            </span>
             <input
               type="number"
               step="any"
@@ -177,16 +176,13 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
               onChange={(e) =>
                 setPurchasePrice(e.target.value === '' ? '' : parseFloat(e.target.value) || 0)
               }
-              placeholder="0 Br"
-              className="w-full pl-12 pr-2.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              placeholder={t.quickAdd.costPlaceholder}
+              className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
           </div>
 
           {/* Selling Price (Span 2) */}
           <div className="sm:col-span-2 relative">
-            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-teal-400 text-xs font-bold">
-              Sell:
-            </span>
             <input
               type="number"
               step="any"
@@ -196,8 +192,8 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
               onChange={(e) =>
                 setRetailPrice(e.target.value === '' ? '' : parseFloat(e.target.value) || 0)
               }
-              placeholder="0 Br"
-              className="w-full pl-11 pr-2.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+              placeholder={t.quickAdd.sellPlaceholder}
+              className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
           </div>
 
@@ -211,14 +207,14 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
                   ? 'bg-emerald-300 shadow-emerald-400/40 scale-[0.98]'
                   : 'bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 shadow-emerald-500/20 active:scale-[0.98]'
               }`}
-              title="Add equipment arrival"
+              title={t.quickAdd.addStock}
             >
               {successPing ? (
                 <Check className="w-4 h-4 text-slate-950" />
               ) : (
                 <>
                   <Plus className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Add</span>
+                  <span className="hidden sm:inline">{t.quickAdd.addStock}</span>
                 </>
               )}
             </button>
@@ -229,7 +225,7 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
         {(numPurchase > 0 || numRetail > 0) && (
           <div className="flex items-center justify-between text-[11px] pt-1 text-slate-400 px-1">
             <div className="flex items-center gap-2">
-              <span>Expected Profit:</span>
+              <span>{t.quickAdd.expectedProfit}:</span>
               <span
                 className={`font-bold ${
                   unitProfit > 0
@@ -246,7 +242,7 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
               </span>
             </div>
             <span className="text-slate-500">
-              Auto-registers as "In Stock" at Main Shop Floor
+              {t.quickAdd.autoRegisters}
             </span>
           </div>
         )}

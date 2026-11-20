@@ -25,6 +25,7 @@ import {
   performStocktakeReconciliation, 
   subscribeToAuditLogs 
 } from '../services/inventoryService';
+import { useTranslation } from '../context/LanguageContext';
 
 interface AuditModalProps {
   isOpen: boolean;
@@ -41,6 +42,7 @@ export const AuditModal: React.FC<AuditModalProps> = ({
   filterItemId,
   onReconciliationComplete,
 }) => {
+  const { t, getAuditActionLabel, getCategoryLabel } = useTranslation();
   const [activeTab, setActiveTab] = useState<'trail' | 'stocktake'>('trail');
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -236,7 +238,7 @@ export const AuditModal: React.FC<AuditModalProps> = ({
         }));
 
       if (changes.length === 0) {
-        setReconcileSuccessMessage('All physical counts match system records perfectly. Zero discrepancies!');
+        setReconcileSuccessMessage(t.auditModal.perfectStockTitle);
         setTimeout(() => setReconcileSuccessMessage(null), 3000);
         return;
       }
@@ -245,7 +247,7 @@ export const AuditModal: React.FC<AuditModalProps> = ({
       await onReconciliationComplete();
       await loadLogs();
       setReconcileSuccessMessage(
-        `Successfully reconciled ${reconciledCount} equipment item(s) and logged audit events.`
+        `${t.toasts.reconciledCount}: ${reconciledCount}`
       );
       setTimeout(() => setReconcileSuccessMessage(null), 4000);
     } catch (err) {
@@ -296,43 +298,43 @@ export const AuditModal: React.FC<AuditModalProps> = ({
       case 'partial_sale':
         return {
           icon: <Receipt className="w-3.5 h-3.5 text-emerald-400" />,
-          label: action === 'partial_sale' ? 'Partial Sale' : 'Sale Recorded',
+          label: getAuditActionLabel(action),
           badgeClass: 'bg-emerald-950/70 text-emerald-300 border-emerald-700/60',
         };
       case 'price_changed':
         return {
           icon: <TrendingUp className="w-3.5 h-3.5 text-violet-400" />,
-          label: 'Price Adjustment',
+          label: getAuditActionLabel(action),
           badgeClass: 'bg-violet-950/70 text-violet-300 border-violet-700/60',
         };
       case 'item_created':
         return {
           icon: <PackagePlus className="w-3.5 h-3.5 text-cyan-400" />,
-          label: 'Stock Intake',
+          label: getAuditActionLabel(action),
           badgeClass: 'bg-cyan-950/70 text-cyan-300 border-cyan-700/60',
         };
       case 'stocktake_adjustment':
         return {
           icon: <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />,
-          label: 'Audit Reconciliation',
+          label: getAuditActionLabel(action),
           badgeClass: 'bg-amber-950/70 text-amber-300 border-amber-700/60',
         };
       case 'item_deleted':
         return {
           icon: <Trash2 className="w-3.5 h-3.5 text-rose-400" />,
-          label: 'Item Deleted',
+          label: getAuditActionLabel(action),
           badgeClass: 'bg-rose-950/70 text-rose-300 border-rose-700/60',
         };
       case 'reverted_to_stock':
         return {
           icon: <RefreshCw className="w-3.5 h-3.5 text-slate-400" />,
-          label: 'Reverted to Stock',
+          label: getAuditActionLabel(action),
           badgeClass: 'bg-slate-800 text-slate-300 border-slate-700',
         };
       default:
         return {
           icon: <Tag className="w-3.5 h-3.5 text-slate-400" />,
-          label: 'Item Updated',
+          label: getAuditActionLabel(action),
           badgeClass: 'bg-slate-800 text-slate-300 border-slate-700',
         };
     }
@@ -353,14 +355,14 @@ export const AuditModal: React.FC<AuditModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-bold text-white">
-                  Inventory Audit &amp; Stocktake Control
+                  {t.auditModal.modalTitle}
                 </h3>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
-                  {auditLogs.length} Logged Events
+                  {auditLogs.length} {t.common.actions}
                 </span>
               </div>
               <p className="text-xs text-slate-400">
-                Activity audit trail, price discrepancy tracking, and physical stock count reconciliation
+                {t.auditModal.modalSubtitle}
               </p>
             </div>
           </div>
@@ -371,27 +373,27 @@ export const AuditModal: React.FC<AuditModalProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveTab('trail')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                   activeTab === 'trail'
                     ? 'bg-slate-800 text-white shadow-sm'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
                 <History className="w-3.5 h-3.5" />
-                <span>Audit Trail</span>
+                <span>{t.auditModal.tabActivityTrail}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setActiveTab('stocktake')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                   activeTab === 'stocktake'
                     ? 'bg-amber-950/80 text-amber-300 border border-amber-600/50 shadow-sm'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
                 <ClipboardCheck className="w-3.5 h-3.5 text-amber-400" />
-                <span>Physical Stocktake</span>
+                <span>{t.auditModal.tabPhysicalStocktake}</span>
                 {totalDiscrepancies > 0 && (
                   <span className="ml-1 px-1.5 py-0.2 rounded-full bg-rose-900 text-rose-300 text-[10px] font-bold">
                     {totalDiscrepancies}
@@ -402,7 +404,7 @@ export const AuditModal: React.FC<AuditModalProps> = ({
 
             <button
               onClick={onClose}
-              className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors ml-1"
+              className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors ml-1 cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -437,7 +439,7 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search item, serial, or event description..."
+                  placeholder={t.filters.searchPlaceholder}
                   className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50"
                 />
               </div>
@@ -449,12 +451,12 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                   onChange={(e) => setSelectedAction(e.target.value)}
                   className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500/50 cursor-pointer"
                 >
-                  <option value="all">All Action Types</option>
-                  <option value="sales">Sales &amp; Deductions</option>
-                  <option value="pricing">Price Adjustments</option>
-                  <option value="intake">New Equipment Intakes</option>
-                  <option value="stocktake">Audit Stocktake Adjustments</option>
-                  <option value="deletions">Item Deletions</option>
+                  <option value="all">{t.common.all}</option>
+                  <option value="sales">{t.auditActions.item_sold}</option>
+                  <option value="pricing">{t.auditActions.price_changed}</option>
+                  <option value="intake">{t.auditActions.item_created}</option>
+                  <option value="stocktake">{t.auditActions.stocktake_adjustment}</option>
+                  <option value="deletions">{t.auditActions.item_deleted}</option>
                 </select>
               </div>
 
@@ -466,7 +468,7 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                   className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors shadow-sm cursor-pointer"
                 >
                   <Download className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Export Log (CSV)</span>
+                  <span>{t.auditModal.exportAuditCsv}</span>
                 </button>
               </div>
             </div>
@@ -475,7 +477,7 @@ export const AuditModal: React.FC<AuditModalProps> = ({
             {selectedItemFilter && (
               <div className="px-6 py-2 bg-slate-950 border-b border-slate-800/80 flex items-center justify-between text-xs">
                 <span className="text-slate-400">
-                  Showing audit history filtered for item ID: <code className="text-amber-300 font-mono">{selectedItemFilter}</code>
+                  {t.auditModal.filterByItem}: <code className="text-amber-300 font-mono">{selectedItemFilter}</code>
                 </span>
                 <button
                   type="button"
@@ -483,7 +485,7 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                   className="text-emerald-400 hover:underline flex items-center gap-1 font-semibold"
                 >
                   <X className="w-3 h-3" />
-                  Show All Equipment Logs
+                  {t.auditModal.allEquipmentItems}
                 </button>
               </div>
             )}
@@ -492,13 +494,13 @@ export const AuditModal: React.FC<AuditModalProps> = ({
             <div className="flex-1 overflow-y-auto p-6 space-y-3.5">
               {loading ? (
                 <div className="p-12 text-center text-slate-400 text-sm">
-                  Loading audit logs...
+                  {t.common.loading}
                 </div>
               ) : filteredLogs.length === 0 ? (
                 <div className="p-12 text-center bg-slate-950/40 rounded-2xl border border-slate-800/60 space-y-2">
                   <FileSpreadsheet className="w-8 h-8 text-slate-600 mx-auto" />
-                  <p className="text-sm font-semibold text-slate-300">No matching audit events found</p>
-                  <p className="text-xs text-slate-500">Try adjusting your search query or action filters.</p>
+                  <p className="text-sm font-semibold text-slate-300">{t.auditModal.noActivityFound}</p>
+                  <p className="text-xs text-slate-500">{t.filters.searchPlaceholder}</p>
                 </div>
               ) : (
                 filteredLogs.map((log) => {
@@ -532,7 +534,7 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                           </span>
                           {log.quantity_change !== undefined && log.quantity_change !== null && (
                             <span>
-                              Quantity Change:{' '}
+                              {t.common.quantity}:{' '}
                               <strong
                                 className={
                                   log.quantity_change > 0
@@ -550,7 +552,7 @@ export const AuditModal: React.FC<AuditModalProps> = ({
 
                         {log.financial_impact !== undefined && log.financial_impact !== null && (
                           <div className="flex items-center gap-1.5">
-                            <span className="text-slate-400">Financial Impact:</span>
+                            <span className="text-slate-400">{t.metrics.financialOverview}:</span>
                             <span
                               className={`font-black ${
                                 log.financial_impact > 0
@@ -581,19 +583,19 @@ export const AuditModal: React.FC<AuditModalProps> = ({
             {/* Stocktake KPI Cards Header */}
             <div className="p-4 border-b border-slate-800 bg-slate-950/40 grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                <span className="text-[11px] text-slate-400 uppercase font-semibold block">Tracked Stock Items</span>
+                <span className="text-[11px] text-slate-400 uppercase font-semibold block">{t.metrics.equipmentCountBalance}</span>
                 <span className="text-lg font-bold text-white">{inStockItems.length} SKUs</span>
               </div>
 
               <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                <span className="text-[11px] text-slate-400 uppercase font-semibold block">Audited &amp; Verified</span>
+                <span className="text-[11px] text-slate-400 uppercase font-semibold block">{t.auditModal.reconciledBadge}</span>
                 <span className="text-lg font-bold text-emerald-400">
                   {totalVerified} / {inStockItems.length}
                 </span>
               </div>
 
               <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                <span className="text-[11px] text-slate-400 uppercase font-semibold block">Total Net Variance</span>
+                <span className="text-[11px] text-slate-400 uppercase font-semibold block">{t.auditModal.columnVariance}</span>
                 <span
                   className={`text-lg font-bold ${
                     netVarianceUnits === 0
@@ -603,12 +605,12 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                       : 'text-rose-400'
                   }`}
                 >
-                  {netVarianceUnits > 0 ? `+${netVarianceUnits}` : netVarianceUnits} units
+                  {netVarianceUnits > 0 ? `+${netVarianceUnits}` : netVarianceUnits} {t.units.pcs.plural}
                 </span>
               </div>
 
               <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                <span className="text-[11px] text-slate-400 uppercase font-semibold block">Cost Variance (Discrepancy)</span>
+                <span className="text-[11px] text-slate-400 uppercase font-semibold block">{t.auditModal.columnCostDiscrepancy}</span>
                 <span
                   className={`text-lg font-bold ${
                     netCostVariance === 0
@@ -626,14 +628,14 @@ export const AuditModal: React.FC<AuditModalProps> = ({
             {/* Quick Action Helper */}
             <div className="px-6 py-2.5 bg-slate-950 border-b border-slate-800/80 flex items-center justify-between text-xs">
               <span className="text-slate-400">
-                Count the physical units in your shop shelves and record any variances below to synchronize your inventory records.
+                {t.auditModal.stocktakeSubtitle}
               </span>
               <button
                 type="button"
                 onClick={handleVerifyAllMatching}
                 className="text-xs px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/30 transition-all font-semibold cursor-pointer"
               >
-                Mark All Matching as Counted
+                {t.auditModal.quickAllMatch}
               </button>
             </div>
 
@@ -643,13 +645,13 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                 <table className="w-full text-left text-xs">
                   <thead className="bg-slate-900 border-b border-slate-800 text-slate-400 uppercase tracking-wider font-semibold">
                     <tr>
-                      <th className="py-3 px-3 w-10 text-center">Verified</th>
-                      <th className="py-3 px-3">Equipment / Specs</th>
-                      <th className="py-3 px-3 text-center">System Expected</th>
-                      <th className="py-3 px-3 text-center">Physical Count</th>
-                      <th className="py-3 px-3 text-center">Variance</th>
-                      <th className="py-3 px-3 text-right">Cost Discrepancy</th>
-                      <th className="py-3 px-3">Audit Note / Reason</th>
+                      <th className="py-3 px-3 w-10 text-center">{t.auditModal.reconciledBadge}</th>
+                      <th className="py-3 px-3">{t.auditModal.columnEquipment}</th>
+                      <th className="py-3 px-3 text-center">{t.auditModal.columnExpectedSystem}</th>
+                      <th className="py-3 px-3 text-center">{t.auditModal.columnCountedPhysical}</th>
+                      <th className="py-3 px-3 text-center">{t.auditModal.columnVariance}</th>
+                      <th className="py-3 px-3 text-right">{t.auditModal.columnCostDiscrepancy}</th>
+                      <th className="py-3 px-3">{t.common.notes}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800/60">
@@ -666,7 +668,7 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                         <td className="py-3 px-3">
                           <div className="font-bold text-white text-xs sm:text-sm">{v.item.name}</div>
                           <div className="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
-                            <span>{v.item.category}</span>
+                            <span>{getCategoryLabel(v.item.category)}</span>
                             <span>•</span>
                             <span>{v.item.brand}</span>
                             {v.item.serial_number && <span>• SN: {v.item.serial_number}</span>}
@@ -703,7 +705,7 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                         <td className="py-3 px-3 text-center">
                           {v.variance === 0 ? (
                             <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800">
-                              0 Matched
+                              0 {t.auditModal.reconciledBadge}
                             </span>
                           ) : v.variance > 0 ? (
                             <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-950 text-teal-300 border border-teal-700">
@@ -733,7 +735,7 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                             type="text"
                             value={v.notes || ''}
                             onChange={(e) => handleUpdateNotes(v.item.id, e.target.value)}
-                            placeholder="Reason for discrepancy..."
+                            placeholder={t.common.notes}
                             className="w-full px-2 py-1 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-amber-500"
                           />
                         </td>
@@ -750,12 +752,12 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                 {totalDiscrepancies > 0 ? (
                   <span className="text-amber-300 font-semibold flex items-center gap-1.5">
                     <AlertCircle className="w-4 h-4 text-amber-400" />
-                    {totalDiscrepancies} item(s) have quantity discrepancies that will be adjusted.
+                    {totalDiscrepancies} {t.auditModal.columnVariance}
                   </span>
                 ) : (
                   <span className="text-emerald-400 font-medium flex items-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                    All entered physical quantities match system records.
+                    {t.auditModal.perfectStockTitle}
                   </span>
                 )}
               </div>
@@ -764,9 +766,9 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors"
+                  className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors cursor-pointer"
                 >
-                  Close
+                  {t.common.close}
                 </button>
                 <button
                   type="button"
@@ -777,8 +779,8 @@ export const AuditModal: React.FC<AuditModalProps> = ({
                   <ShieldCheck className="w-4 h-4 stroke-[2.5]" />
                   <span>
                     {isReconciling
-                      ? 'Reconciling...'
-                      : `Apply Reconciliation (${totalDiscrepancies} changes)`}
+                      ? t.common.loading
+                      : `${t.auditModal.reconcileSelected} (${totalDiscrepancies})`}
                   </span>
                 </button>
               </div>
