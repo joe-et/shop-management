@@ -3,22 +3,20 @@ import {
   Download, 
   Plus,
   Boxes,
-  BarChart3,
-  Receipt,
-  ShieldCheck
+  LayoutDashboard,
+  PackagePlus
 } from 'lucide-react';
 import { EquipmentItem } from '../types/inventory';
 import { exportInventoryToCsv } from '../utils/csvExport';
 import { useTranslation } from '../context/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { WorkspaceTab } from './Sidebar';
 
 interface HeaderProps {
   items: EquipmentItem[];
-  activeWorkspace: 'counter' | 'reports';
-  onChangeWorkspace: (workspace: 'counter' | 'reports') => void;
+  activeWorkspace: WorkspaceTab;
+  onChangeWorkspace: (workspace: WorkspaceTab) => void;
   onOpenAddItem: () => void;
-  onOpenAudit: () => void;
-  onOpenExpenses?: () => void;
-  onOpenConfig?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -26,8 +24,6 @@ export const Header: React.FC<HeaderProps> = ({
   activeWorkspace,
   onChangeWorkspace,
   onOpenAddItem,
-  onOpenAudit,
-  onOpenExpenses,
 }) => {
   const { t } = useTranslation();
 
@@ -37,98 +33,101 @@ export const Header: React.FC<HeaderProps> = ({
 
   const inStockCount = items.filter((i) => i.status === 'in_stock' && i.quantity > 0).length;
 
+  const activeTitle =
+    activeWorkspace === 'dashboard'
+      ? t.common.workspaceDashboard
+      : t.common.workspaceItems;
+
+  const activeSubtitle =
+    activeWorkspace === 'dashboard'
+      ? t.dashboard.welcomeSubtitle
+      : t.common.itemsSubtitle;
+
   return (
     <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-xs border-b border-slate-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-3">
-        {/* Left: Active Workspace Title & Mobile Nav Switcher */}
-        <div className="flex items-center gap-3">
-          {/* Mobile Workspace Toggle Tabs (shown on small screens where sidebar is hidden) */}
-          <div className="flex sm:hidden items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200">
-            <button
-              type="button"
-              onClick={() => onChangeWorkspace('counter')}
-              className={`p-1.5 rounded-md text-xs font-semibold ${
-                activeWorkspace === 'counter'
-                  ? 'bg-white text-slate-900 shadow-xs'
-                  : 'text-slate-600'
-              }`}
-              title={t.common.workspaceCounter}
-            >
-              <Boxes className="w-4 h-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => onChangeWorkspace('reports')}
-              className={`p-1.5 rounded-md text-xs font-semibold ${
-                activeWorkspace === 'reports'
-                  ? 'bg-white text-slate-900 shadow-xs'
-                  : 'text-slate-600'
-              }`}
-              title={t.common.workspaceReports}
-            >
-              <BarChart3 className="w-4 h-4" />
-            </button>
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-2 sm:gap-3">
+        {/* Left: Brand/Workspace Title & Stock Badge */}
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          {/* Mobile brand icon */}
+          <div className="md:hidden w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center shrink-0">
+            <Boxes className="w-4 h-4" />
           </div>
 
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
-                {activeWorkspace === 'counter'
-                  ? t.common.workspaceCounter
-                  : t.common.workspaceReports}
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+              <h1 className="text-xs sm:text-sm lg:text-base font-bold text-slate-900 tracking-tight truncate min-w-0">
+                {activeTitle}
               </h1>
-              <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
-                {inStockCount} {t.filters.tabInStock}
+              <span className="text-[10px] sm:text-[11px] font-semibold text-slate-500 bg-slate-100 border border-slate-200 px-1.5 sm:px-2 py-0.5 rounded-md shrink-0">
+                {inStockCount} <span className="hidden xs:inline">{t.filters.tabInStock}</span>
               </span>
             </div>
-            <p className="text-[11px] text-slate-500 hidden sm:block">
-              {t.common.appSubtitle}
+            <p className="text-[11px] text-slate-400 hidden lg:block truncate">
+              {activeSubtitle}
             </p>
           </div>
         </div>
 
-        {/* Right: Action Buttons (Reserved Black CTA + Neutral Utilities) */}
-        <div className="flex items-center gap-2">
-          {/* Mobile Tools (Expenses & Audit on small screens) */}
-          {onOpenExpenses && (
-            <button
-              type="button"
-              onClick={onOpenExpenses}
-              className="sm:hidden p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
-              title={t.common.expenses}
-            >
-              <Receipt className="w-4 h-4" />
-            </button>
-          )}
+        {/* Center: Top Navbar Workspace Tabs (Dashboard & Items only; Reports lives under Dashboard) */}
+        <nav
+          aria-label="Primary Navbar"
+          className="hidden md:flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 shrink-0"
+        >
+          <button
+            type="button"
+            onClick={() => onChangeWorkspace('dashboard')}
+            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
+              activeWorkspace === 'dashboard'
+                ? 'bg-slate-900 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/70'
+            }`}
+          >
+            <LayoutDashboard className="w-3.5 h-3.5 shrink-0" />
+            <span>{t.common.navDashboard}</span>
+          </button>
 
           <button
             type="button"
-            onClick={onOpenAudit}
-            className="sm:hidden p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
-            title={t.common.auditStocktake}
+            onClick={() => onChangeWorkspace('items')}
+            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
+              activeWorkspace === 'items'
+                ? 'bg-slate-900 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/70'
+            }`}
           >
-            <ShieldCheck className="w-4 h-4" />
+            <PackagePlus className="w-3.5 h-3.5 shrink-0" />
+            <span>{t.common.navItems}</span>
           </button>
+        </nav>
 
-          {/* Export CSV (Neutral secondary tool) */}
+        {/* Right: Action Buttons (Single Primary CTA + Utility Controls) */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Mobile Quick Language Switcher */}
+          <div className="md:hidden">
+            <LanguageSwitcher compact align="right" direction="down" />
+          </div>
+
+          {/* Export CSV */}
           <button
             type="button"
             onClick={handleExportCsv}
-            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-medium transition-colors cursor-pointer shadow-2xs"
+            className="inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-medium transition-colors cursor-pointer shadow-2xs shrink-0"
             title={t.common.exportCsv}
+            aria-label={t.common.exportCsv}
           >
-            <Download className="w-3.5 h-3.5 text-slate-500" />
-            <span>{t.common.exportCsv}</span>
+            <Download className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+            <span className="hidden xs:inline md:hidden lg:inline">{t.common.exportCsv}</span>
           </button>
 
-          {/* Reserved Primary CTA: High-Contrast Black Button */}
+          {/* Single Primary CTA: Detailed Add Item Modal */}
           <button
             type="button"
             onClick={onOpenAddItem}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer select-none"
+            className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer select-none shrink-0"
+            title={t.common.newArrival}
           >
-            <Plus className="w-4 h-4 stroke-[2.5]" />
-            <span>{t.common.newArrival}</span>
+            <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
+            <span className="hidden sm:inline">{t.common.newArrival}</span>
           </button>
         </div>
       </div>

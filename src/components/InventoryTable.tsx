@@ -127,9 +127,9 @@ export const InventoryTable: React.FC<InventoryTableProps> = ({
 
   return (
     <div className="bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden">
-      {/* Desktop / Tablet Table View */}
+      {/* Desktop / Tablet Table View (Scrolls horizontally inside container if screen narrower than table) */}
       <div className="hidden lg:block overflow-x-auto">
-        <table className="w-full text-left border-collapse">
+        <table className="w-full text-left border-collapse min-w-[850px]">
           <thead>
             <tr className="border-b border-slate-200 bg-slate-50/75 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
               <th className="py-2.5 px-3.5">{t.table.equipmentDetails}</th>
@@ -355,14 +355,14 @@ export const InventoryTable: React.FC<InventoryTableProps> = ({
           const isLoss = metrics.profit < 0;
 
           return (
-            <div key={item.id} className="p-3.5 space-y-2.5">
+            <div key={item.id} className="p-3 sm:p-4 space-y-2.5">
               {/* Header: Title & Status */}
               <div className="flex items-start justify-between gap-2">
-                <div>
-                  <h4 className="font-semibold text-slate-900 text-sm leading-snug">
+                <div className="min-w-0 flex-1">
+                  <h4 className="font-semibold text-slate-900 text-sm leading-snug break-words">
                     {item.name}
                   </h4>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
+                  <p className="text-[11px] text-slate-500 mt-0.5 break-words">
                     {item.brand} {item.model ? `• ${item.model}` : ''} • {getCategoryLabel(item.category)}
                   </p>
                 </div>
@@ -373,7 +373,7 @@ export const InventoryTable: React.FC<InventoryTableProps> = ({
               </div>
 
               {/* Serial & Qty */}
-              <div className="flex items-center gap-2 text-xs text-slate-500">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
                 {item.serial_number && (
                   <span className="font-mono text-[10px] bg-slate-50 px-1.5 py-0.2 rounded border border-slate-200">
                     SN: {item.serial_number}
@@ -386,24 +386,24 @@ export const InventoryTable: React.FC<InventoryTableProps> = ({
 
               {/* Financial Summary Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 p-2.5 bg-slate-50 rounded-lg border border-slate-200 text-xs">
-                <div>
+                <div className="min-w-0">
                   <span className="text-slate-400 block text-[10px] uppercase font-semibold">{t.table.purchaseCost}</span>
-                  <span className="font-semibold text-slate-800">{formatBirr(item.purchase_price)}</span>
+                  <span className="font-semibold text-slate-800 truncate block">{formatBirr(item.purchase_price)}</span>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <span className="text-slate-400 block text-[10px] uppercase font-semibold">{t.table.retailPrice}</span>
-                  <span className="font-semibold text-slate-900">{formatBirr(item.retail_price)}</span>
+                  <span className="font-semibold text-slate-900 truncate block">{formatBirr(item.retail_price)}</span>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <span className="text-slate-400 block text-[10px] uppercase font-semibold">{t.table.soldPrice}</span>
-                  <span className="font-semibold text-slate-900">
+                  <span className="font-semibold text-slate-900 truncate block">
                     {isSold && item.sold_price !== null ? formatBirr(item.sold_price) : '—'}
                   </span>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <span className="text-slate-400 block text-[10px] uppercase font-semibold">{t.table.profitMargin}</span>
                   <span
-                    className={`font-bold ${
+                    className={`font-bold truncate block ${
                       isProfitable ? 'text-emerald-600' : isLoss ? 'text-rose-600' : 'text-slate-500'
                     }`}
                   >
@@ -413,19 +413,19 @@ export const InventoryTable: React.FC<InventoryTableProps> = ({
               </div>
 
               {isSold && (
-                <div className="text-[11px] text-slate-500 flex items-center justify-between border-t border-slate-100 pt-1.5">
+                <div className="text-[11px] text-slate-500 flex flex-wrap items-center justify-between gap-1 border-t border-slate-100 pt-1.5">
                   <span>{t.statuses.sold}: {formatDate(item.sold_at)}</span>
                   {item.customer_name && <span>{t.soldModal.customerName}: {item.customer_name}</span>}
                 </div>
               )}
 
-              {/* Action Buttons Row */}
-              <div className="flex items-center justify-end gap-1.5 pt-1 border-t border-slate-100">
+              {/* Action Buttons Row - Touch friendly sizes */}
+              <div className="flex flex-wrap items-center justify-end gap-1.5 pt-1.5 border-t border-slate-100">
                 {!isSold ? (
                   <button
                     type="button"
                     onClick={() => onMarkSold(item)}
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 transition-colors shadow-2xs"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 transition-colors shadow-2xs min-h-[36px] cursor-pointer"
                   >
                     <DollarSign className="w-3.5 h-3.5 stroke-[2.5]" />
                     <span>{t.common.sell}</span>
@@ -434,7 +434,7 @@ export const InventoryTable: React.FC<InventoryTableProps> = ({
                   <button
                     type="button"
                     onClick={() => onRevertToStock(item)}
-                    className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 transition-colors min-h-[36px] cursor-pointer"
                   >
                     <RotateCcw className="w-3.5 h-3.5 text-slate-600" />
                     <span>{t.common.revert}</span>
@@ -444,7 +444,7 @@ export const InventoryTable: React.FC<InventoryTableProps> = ({
                 <button
                   type="button"
                   onClick={() => onEdit(item)}
-                  className="p-1.5 rounded-lg text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 transition-colors"
+                  className="p-2 rounded-lg text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center cursor-pointer"
                   title={t.common.edit}
                 >
                   <Edit3 className="w-3.5 h-3.5" />
@@ -454,7 +454,7 @@ export const InventoryTable: React.FC<InventoryTableProps> = ({
                   <button
                     type="button"
                     onClick={() => onViewAuditHistory(item)}
-                    className="p-1.5 rounded-lg text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 transition-colors"
+                    className="p-2 rounded-lg text-slate-600 bg-white hover:bg-slate-100 border border-slate-200 transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center cursor-pointer"
                     title={t.common.viewAuditHistory}
                   >
                     <History className="w-3.5 h-3.5" />
@@ -464,7 +464,7 @@ export const InventoryTable: React.FC<InventoryTableProps> = ({
                 <button
                   type="button"
                   onClick={() => onDelete(item)}
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-200 transition-colors"
+                  className="p-2 rounded-lg text-slate-400 hover:text-rose-600 bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-200 transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center cursor-pointer"
                   title={t.common.delete}
                 >
                   <Trash2 className="w-3.5 h-3.5" />

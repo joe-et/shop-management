@@ -54,23 +54,23 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
       {/* Timeframe Filter Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
-          <Calendar className="w-3.5 h-3.5 text-slate-700" />
-          <span>{t.metrics.financialOverview}</span>
+          <Calendar className="w-3.5 h-3.5 text-slate-700 shrink-0" />
+          <span className="truncate">{t.metrics.financialOverview}</span>
           {isPeriodActive && (
-            <span className="text-[10px] lowercase font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+            <span className="text-[10px] lowercase font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200 shrink-0">
               {getTimeframeLabel(timeframe)}
             </span>
           )}
         </div>
 
-        {/* Timeframe Pills */}
-        <div className="flex items-center gap-1 bg-white border border-slate-200 p-1 rounded-xl shadow-xs self-start sm:self-auto">
+        {/* Timeframe Pills (Horizontally scrollable on mobile) */}
+        <div className="flex items-center gap-1 bg-white border border-slate-200 p-1 rounded-xl shadow-xs overflow-x-auto max-w-full scrollbar-none self-start sm:self-auto">
           {(['today', 'this_week', 'this_month', 'all_time'] as TimeframePeriod[]).map((period) => (
             <button
               key={period}
               type="button"
               onClick={() => onTimeframeChange(period)}
-              className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+              className={`shrink-0 px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
                 timeframe === period
                   ? 'bg-slate-900 text-white font-semibold shadow-xs'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
@@ -116,9 +116,9 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
 
             {displayExpenses > 0 ? (
               <div className="flex items-center gap-1.5 text-[11px] text-slate-500 mt-1 flex-wrap">
-                <span className="text-emerald-700 font-medium">{t.metrics.grossProfit}: +{formatBirr(displayGrossProfit)}</span>
+                <span className="text-emerald-700 font-medium whitespace-nowrap">{t.metrics.grossProfit}: +{formatBirr(displayGrossProfit)}</span>
                 <span className="text-slate-300">•</span>
-                <span className="text-rose-700 font-medium">{t.metrics.overhead}: -{formatBirr(displayExpenses)}</span>
+                <span className="text-rose-700 font-medium whitespace-nowrap">{t.metrics.overhead}: -{formatBirr(displayExpenses)}</span>
               </div>
             ) : (
               <p className="text-xs text-slate-500 mt-0.5">
@@ -127,11 +127,11 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
             )}
           </div>
 
-          <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
-            <div className="flex items-center gap-1">
+          <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs gap-1">
+            <div className="flex items-center gap-1 whitespace-nowrap">
               <span className="text-slate-500">{t.metrics.margin}:</span>
               <span
-                className={`font-semibold flex items-center ${
+                className={`font-semibold flex items-center whitespace-nowrap ${
                   displayMargin >= 0 ? 'text-emerald-600' : 'text-rose-600'
                 }`}
               >
@@ -139,10 +139,10 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
                 {displayMargin.toFixed(1)}%
               </span>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 whitespace-nowrap">
               <span className="text-slate-500">{t.metrics.roi}:</span>
               <span
-                className={`font-semibold ${
+                className={`font-semibold whitespace-nowrap ${
                   displayRoi >= 0 ? 'text-emerald-600' : 'text-rose-600'
                 }`}
               >
@@ -164,7 +164,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
           </div>
 
           <div className="mt-2">
-            <div className="text-2xl font-bold tracking-tight text-slate-900">
+            <div className="text-2xl font-bold tracking-tight text-slate-900 whitespace-nowrap">
               {formatBirr(displayRevenue)}
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -172,9 +172,9 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
             </p>
           </div>
 
-          <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-            <span>{t.metrics.costOfSold}:</span>
-            <span className="font-semibold text-slate-700">
+          <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 gap-1">
+            <span className="truncate">{t.metrics.costOfSold}:</span>
+            <span className="font-semibold text-slate-700 whitespace-nowrap shrink-0">
               {formatBirr(displayCostOfSold)}
             </span>
           </div>
@@ -192,7 +192,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
           </div>
 
           <div className="mt-2">
-            <div className="text-2xl font-bold tracking-tight text-slate-900">
+            <div className="text-2xl font-bold tracking-tight text-slate-900 whitespace-nowrap">
               {formatBirr(metrics.activeInventoryCost)}
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -200,11 +200,16 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
             </p>
           </div>
 
-          <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
-            <span className="text-slate-500">{t.metrics.activeRetailValue}:</span>
-            <div className="flex items-center gap-1.5 font-semibold text-slate-800">
-              <span>{formatBirr(metrics.activeInventoryRetailValue)}</span>
-              <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1 py-0.2 rounded border border-emerald-200">
+          <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs gap-1">
+            <span 
+              className="text-slate-500 truncate"
+              title={`${t.metrics.activeRetailValue}: ${formatBirr(metrics.activeInventoryRetailValue)} (+${formatBirr(metrics.potentialProfit)})`}
+            >
+              {t.metrics.activeRetailValue}:
+            </span>
+            <div className="flex items-center gap-1.5 font-semibold text-slate-800 shrink-0 whitespace-nowrap">
+              <span className="whitespace-nowrap">{formatBirr(metrics.activeInventoryRetailValue)}</span>
+              <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 whitespace-nowrap shrink-0 inline-flex items-center">
                 +{formatBirr(metrics.potentialProfit, { compact: true })}
               </span>
             </div>
@@ -233,7 +238,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
           </div>
 
           {/* Interactive Stock Health Pills */}
-          <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between gap-1 text-xs">
+          <div className="mt-3 pt-2.5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-1 text-xs">
             {/* Low Stock Badge */}
             <button
               type="button"

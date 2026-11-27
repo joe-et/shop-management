@@ -230,20 +230,23 @@ export const ItemModal: React.FC<ItemModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] sm:p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
       <div 
-        className="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[94vh]"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="item-modal-title"
+        className="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[82dvh] sm:max-h-[85vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-200 bg-slate-50">
+        <div className="flex items-center justify-between px-4 sm:px-5 py-3 sm:py-3.5 border-b border-slate-200 bg-slate-50">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-xs">
               <PackagePlus className="w-4 h-4 stroke-[2.2]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-sm sm:text-base font-bold text-slate-900">
+                <h3 id="item-modal-title" className="text-sm sm:text-base font-bold text-slate-900">
                   {isEditing ? t.itemModal.titleEdit : t.itemModal.titleNew}
                 </h3>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
@@ -285,12 +288,15 @@ export const ItemModal: React.FC<ItemModalProps> = ({
 
         {/* Modal Form */}
         <form
+          id="item-modal-form"
           onSubmit={(e) => {
             e.preventDefault();
             processSubmit(false);
           }}
-          className="p-5 overflow-y-auto space-y-4"
+          className="flex flex-col flex-1 min-h-0 overflow-hidden"
         >
+          {/* Scrollable Form Body */}
+          <div className="p-3.5 sm:p-5 overflow-y-auto space-y-4 flex-1 overscroll-contain">
           {/* SECTION 1: Item Identification */}
           <div className="space-y-2.5">
             <div className="flex items-center justify-between">
@@ -433,7 +439,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
                     {t.itemModal.targetSellingPricePerUnit} ({activeUnitSingular}) <span className="text-rose-500">*</span>
                   </label>
                   {numPurchase > 0 && (
-                    <div className="flex items-center gap-1 text-[10px] text-slate-500">
+                    <div className="flex flex-wrap items-center gap-1 text-[10px] text-slate-500">
                       <span>{t.itemModal.markup}:</span>
                       <button
                         type="button"
@@ -520,7 +526,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {/* Unit of Measurement Selection */}
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
@@ -702,25 +708,26 @@ export const ItemModal: React.FC<ItemModalProps> = ({
               {error}
             </div>
           )}
+          </div>
 
-          {/* Footer Action Buttons */}
-          <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-2.5 pt-3 border-t border-slate-200">
+          {/* Pinned Modal Footer Actions */}
+          <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-2.5 px-4 sm:px-5 py-3 border-t border-slate-200 bg-slate-50 shrink-0">
             <button
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="px-3.5 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer"
+              className="w-full sm:w-auto px-3.5 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer text-center"
             >
               {t.common.cancel}
             </button>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col-reverse sm:flex-row items-center gap-2 w-full sm:w-auto">
               {!isEditing && (
                 <button
                   type="button"
                   disabled={isSubmitting}
                   onClick={() => processSubmit(true)}
-                  className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-slate-800 bg-white hover:bg-slate-50 border border-slate-200 shadow-2xs transition-all cursor-pointer disabled:opacity-50"
+                  className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-slate-800 bg-white hover:bg-slate-50 border border-slate-200 shadow-2xs transition-all cursor-pointer disabled:opacity-50"
                   title="Register this item and keep modal open for the next arrival"
                 >
                   <Plus className="w-3.5 h-3.5" />
@@ -731,7 +738,7 @@ export const ItemModal: React.FC<ItemModalProps> = ({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 shadow-xs transition-colors cursor-pointer disabled:opacity-50"
+                className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 shadow-xs transition-colors cursor-pointer disabled:opacity-50"
               >
                 {isSubmitting
                   ? t.common.loading

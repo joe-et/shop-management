@@ -48,8 +48,19 @@ export interface TranslationDictionary {
     revertToStock: string;
     currencySymbol: string;
     currencyName: string;
+    workspaceDashboard: string;
+    workspaceItems: string;
+    itemsSubtitle: string;
     workspaceCounter: string;
     workspaceReports: string;
+    navDashboard: string;
+    navItems: string;
+    navCounter: string;
+    navReports: string;
+    navMenu: string;
+    auditSubtitle: string;
+    settingsSubtitle: string;
+    exportCsvSubtitle: string;
   };
 
   // Sync Pill
@@ -118,10 +129,15 @@ export interface TranslationDictionary {
     conditionAll: string;
     sortBy: string;
     sortLatest: string;
+    sortOldest: string;
     sortName: string;
+    sortNameDesc: string;
     sortPriceLowHigh: string;
     sortPriceHighLow: string;
+    sortCostLowHigh: string;
+    sortCostHighLow: string;
     sortProfit: string;
+    sortProfitLowHigh: string;
     sortQuantity: string;
   };
 
@@ -287,8 +303,11 @@ export interface TranslationDictionary {
     currencyValue: string;
     currencyHint: string;
     cloudStatus: string;
+    statusActive: string;
+    statusOffline: string;
     cloudConnectedDesc: string;
     cloudLocalDesc: string;
+    defaultBadge: string;
     language: string;
     appearanceMode: string;
     lightMode: string;
@@ -410,6 +429,29 @@ export interface TranslationDictionary {
     deleteItemWarning: string;
     deleteItemConfirm: string;
     deleting: string;
+  };
+
+  // Dashboard View
+  dashboard: {
+    welcomeSubtitle: string;
+    stockAlertsTitle: string;
+    allStockHealthy: string;
+    allStockHealthyDesc: string;
+    itemsNeedAttention: string;
+    leftInStock: string;
+    outOfStockLabel: string;
+    viewInCounter: string;
+    categorySummaryTitle: string;
+    noCategoryData: string;
+    recentItemsTitle: string;
+    noRecentItems: string;
+    openCounter: string;
+    profitLossTitle: string;
+    potentialProfit: string;
+    totalValuation: string;
+    itemsCountLabel: string;
+    inventorySectionTitle: string;
+    reportsSectionTitle: string;
   };
 
   // Footer

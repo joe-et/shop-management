@@ -134,19 +134,22 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
   const unitLabel = numQtyToSell === 1 ? unitDisp.singular : unitDisp.plural;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] sm:p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
       <div 
-        className="w-full max-w-lg bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[92vh]"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="mark-sold-modal-title"
+        className="w-full max-w-lg bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[82dvh] sm:max-h-[85vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-200 bg-slate-50">
+        <div className="flex items-center justify-between px-4 sm:px-5 py-3 sm:py-3.5 border-b border-slate-200 bg-slate-50">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-xs">
               <Receipt className="w-4 h-4 stroke-[2.2]" />
             </div>
             <div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900">{t.soldModal.title}</h3>
+              <h3 id="mark-sold-modal-title" className="text-sm sm:text-base font-bold text-slate-900">{t.soldModal.title}</h3>
               <p className="text-xs text-slate-500">{t.soldModal.subtitle}</p>
             </div>
           </div>
@@ -159,7 +162,8 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <form onSubmit={handleSubmit} className="p-5 overflow-y-auto space-y-3.5">
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+          <div className="p-3.5 sm:p-5 overflow-y-auto space-y-3.5 flex-1 overscroll-contain">
           {/* Item Context Card */}
           <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
             <div className="flex items-start justify-between gap-2">
@@ -204,7 +208,7 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
               </span>
             </div>
 
-            <div className="flex items-center gap-2.5">
+            <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5">
               {/* Stepper Input */}
               <div className="flex items-center bg-white border border-slate-200 rounded-lg overflow-hidden shadow-xs">
                 <button
@@ -476,21 +480,22 @@ export const MarkSoldModal: React.FC<MarkSoldModalProps> = ({
               {error}
             </div>
           )}
+          </div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-200">
+          {/* Pinned Action Buttons */}
+          <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 px-4 sm:px-5 py-3 border-t border-slate-200 bg-slate-50 shrink-0">
             <button
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="px-3.5 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer"
+              className="w-full sm:w-auto px-3.5 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer text-center"
             >
               {t.common.cancel}
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 rounded-lg text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 shadow-xs transition-colors cursor-pointer disabled:opacity-50"
+              className="w-full sm:w-auto px-4 py-2 rounded-lg text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 shadow-xs transition-colors cursor-pointer disabled:opacity-50 text-center"
             >
               {isSubmitting
                 ? t.common.loading

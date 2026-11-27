@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { 
   Plus, 
-  SlidersHorizontal,
   Check,
   Zap
 } from 'lucide-react';
@@ -11,12 +10,10 @@ import { useTranslation } from '../context/LanguageContext';
 
 interface QuickAddBarProps {
   onSave: (input: EquipmentItemInput) => Promise<void>;
-  onOpenFullModal: () => void;
 }
 
 export const QuickAddBar: React.FC<QuickAddBarProps> = ({
   onSave,
-  onOpenFullModal,
 }) => {
   const { t, getCategoryLabel, getUnitDisplay } = useTranslation();
   const [name, setName] = useState('');
@@ -89,39 +86,29 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
             </span>
           </h3>
         </div>
-
-        <button
-          type="button"
-          onClick={onOpenFullModal}
-          className="text-xs text-slate-600 hover:text-slate-900 flex items-center gap-1 font-medium transition-colors cursor-pointer"
-          title={t.quickAdd.detailedForm}
-        >
-          <SlidersHorizontal className="w-3 h-3 text-slate-500" />
-          <span>{t.quickAdd.detailedForm}</span>
-        </button>
       </div>
 
-      {/* Form Fields - 1 Row Compact Grid */}
+      {/* Form Fields - Responsive Grid (Mobile 2 cols, Tablet 6 cols, Desktop 12 cols) */}
       <form onSubmit={handleQuickSubmit} className="space-y-2">
-        <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
-          {/* Equipment Name (Span 3) */}
-          <div className="sm:col-span-3">
+        <div className="grid grid-cols-2 sm:grid-cols-6 lg:grid-cols-12 gap-2">
+          {/* Equipment Name */}
+          <div className="col-span-2 sm:col-span-6 lg:col-span-2">
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={t.quickAdd.namePlaceholder}
-              className="w-full px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors font-medium"
+              className="w-full px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors font-medium min-h-[36px]"
             />
           </div>
 
-          {/* Category (Span 2) */}
-          <div className="sm:col-span-2">
+          {/* Category */}
+          <div className="col-span-2 sm:col-span-3 lg:col-span-2">
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-2 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors cursor-pointer"
+              className="w-full px-2 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors cursor-pointer min-h-[36px]"
             >
               {ITEM_CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
@@ -131,8 +118,8 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
             </select>
           </div>
 
-          {/* Quantity (Span 1) */}
-          <div className="sm:col-span-1">
+          {/* Quantity */}
+          <div className="col-span-1 sm:col-span-1 lg:col-span-1">
             <input
               type="number"
               min="1"
@@ -141,28 +128,28 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
               onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
               placeholder={t.common.quantity}
               title={t.quickAdd.qtyTitle}
-              className="w-full px-1.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-center font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors"
+              className="w-full px-1.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-center font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors min-h-[36px]"
             />
           </div>
 
-          {/* Unit (Span 1) */}
-          <div className="sm:col-span-1">
+          {/* Unit */}
+          <div className="col-span-1 sm:col-span-2 lg:col-span-1">
             <select
               value={unit}
               onChange={(e) => setUnit(e.target.value)}
               title={t.quickAdd.unitTitle}
-              className="w-full px-1 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-700 font-medium focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors cursor-pointer"
+              className="w-full px-1.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-700 font-medium focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors cursor-pointer min-h-[36px] truncate whitespace-nowrap"
             >
               {STANDARD_UNITS.map((u) => (
-                <option key={u.value} value={u.value}>
-                  {getUnitDisplay(u.value).label}
+                <option key={u.value} value={u.value} title={getUnitDisplay(u.value).label}>
+                  {getUnitDisplay(u.value).singular}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Purchase Price (Span 2) */}
-          <div className="sm:col-span-2">
+          {/* Purchase Price */}
+          <div className="col-span-1 sm:col-span-3 lg:col-span-2">
             <input
               type="number"
               step="any"
@@ -173,12 +160,12 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
                 setPurchasePrice(e.target.value === '' ? '' : parseFloat(e.target.value) || 0)
               }
               placeholder={t.quickAdd.costPlaceholder}
-              className="w-full px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 font-medium focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors"
+              className="w-full px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 font-medium focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors min-h-[36px]"
             />
           </div>
 
-          {/* Selling Price (Span 2) */}
-          <div className="sm:col-span-2">
+          {/* Selling Price */}
+          <div className="col-span-1 sm:col-span-3 lg:col-span-2">
             <input
               type="number"
               step="any"
@@ -189,16 +176,16 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
                 setRetailPrice(e.target.value === '' ? '' : parseFloat(e.target.value) || 0)
               }
               placeholder={t.quickAdd.sellPlaceholder}
-              className="w-full px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 font-medium focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors"
+              className="w-full px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 font-medium focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition-colors min-h-[36px]"
             />
           </div>
 
-          {/* Submit Button (Span 1) - Reserved Black CTA */}
-          <div className="sm:col-span-1 flex items-center">
+          {/* Submit Button - Reserved Black CTA */}
+          <div className="col-span-2 sm:col-span-6 lg:col-span-2 flex items-center">
             <button
               type="submit"
               disabled={isSubmitting || !name.trim()}
-              className={`w-full flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg text-xs font-semibold text-white transition-all cursor-pointer shadow-xs disabled:opacity-40 ${
+              className={`w-full min-h-[36px] flex items-center justify-center gap-1 sm:gap-1.5 px-2 xl:px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-all cursor-pointer shadow-xs disabled:opacity-40 whitespace-nowrap ${
                 successPing
                   ? 'bg-emerald-600'
                   : 'bg-slate-900 hover:bg-slate-800'
@@ -209,8 +196,8 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
                 <Check className="w-3.5 h-3.5 text-white stroke-[2.5]" />
               ) : (
                 <>
-                  <Plus className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">{t.quickAdd.addStock}</span>
+                  <Plus className="w-3.5 h-3.5 shrink-0" />
+                  <span className="whitespace-nowrap truncate">{t.quickAdd.addStock}</span>
                 </>
               )}
             </button>
@@ -219,7 +206,7 @@ export const QuickAddBar: React.FC<QuickAddBarProps> = ({
 
         {/* Real-time Calculation Micro-banner */}
         {(numPurchase > 0 || numRetail > 0) && (
-          <div className="flex items-center justify-between text-[11px] pt-0.5 text-slate-500 px-1 border-t border-slate-100">
+          <div className="flex flex-col xs:flex-row sm:flex-row xs:items-center sm:items-center justify-between text-[11px] pt-1 text-slate-500 px-1 border-t border-slate-100 gap-1">
             <div className="flex items-center gap-2">
               <span>{t.quickAdd.expectedProfit}:</span>
               <span

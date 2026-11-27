@@ -132,19 +132,22 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
   const currentlyConfigured = isSupabaseConfigured();
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] sm:p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
       <div 
-        className="w-full max-w-xl bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="supabase-config-modal-title"
+        className="w-full max-w-xl bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[82dvh] sm:max-h-[85vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-200 bg-slate-50">
+        <div className="flex items-center justify-between px-4 sm:px-5 py-3 sm:py-3.5 border-b border-slate-200 bg-slate-50">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-xs">
               <Settings className="w-4 h-4 stroke-[2.2]" />
             </div>
             <div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900">{t.dbModal.title}</h3>
+              <h3 id="supabase-config-modal-title" className="text-sm sm:text-base font-bold text-slate-900">{t.dbModal.title}</h3>
               <p className="text-xs text-slate-500">{t.dbModal.subtitle}</p>
             </div>
           </div>
@@ -157,7 +160,7 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
         </div>
 
         {/* Body */}
-        <div className="p-5 overflow-y-auto space-y-4">
+        <div className="p-3.5 sm:p-5 overflow-y-auto space-y-4 flex-1 overscroll-contain">
           {/* Status Banner */}
           <div
             className={`p-3.5 rounded-xl border flex items-start gap-2.5 ${
@@ -238,12 +241,12 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
 
           {/* Buttons Row */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 pt-3 border-t border-slate-200">
-            <div>
+            <div className="w-full sm:w-auto">
               {currentlyConfigured && (
                 <button
                   type="button"
                   onClick={handleClear}
-                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-rose-700 hover:bg-rose-50 border border-rose-200 transition-colors cursor-pointer"
+                  className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-lg text-xs font-medium text-rose-700 hover:bg-rose-50 border border-rose-200 transition-colors cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>{t.dbModal.switchToLocal}</span>
@@ -251,12 +254,12 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
               )}
             </div>
 
-            <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+            <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto justify-end">
               <button
                 type="button"
                 onClick={handleTestConnection}
                 disabled={isTesting}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 transition-colors disabled:opacity-40 cursor-pointer shadow-2xs"
+                className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 transition-colors disabled:opacity-40 cursor-pointer shadow-2xs"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isTesting ? 'animate-spin text-slate-900' : 'text-slate-500'}`} />
                 <span>{isTesting ? t.common.loading : t.dbModal.testConnection}</span>
@@ -265,7 +268,7 @@ export const SupabaseConfigModal: React.FC<SupabaseConfigModalProps> = ({
               <button
                 type="button"
                 onClick={handleSave}
-                className="px-4 py-1.5 rounded-lg text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 shadow-xs transition-colors cursor-pointer"
+                className="w-full sm:w-auto px-4 py-2 sm:py-1.5 rounded-lg text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 shadow-xs transition-colors cursor-pointer text-center"
               >
                 {t.dbModal.connectCloud}
               </button>
